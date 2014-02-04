@@ -35,7 +35,7 @@
             this.tsmVerbindung = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiVerbinden = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTrennen = new System.Windows.Forms.ToolStripMenuItem();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rtbSchreiben = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,29 +91,29 @@
             // tsmiVerbinden
             // 
             this.tsmiVerbinden.Name = "tsmiVerbinden";
-            this.tsmiVerbinden.Size = new System.Drawing.Size(152, 22);
+            this.tsmiVerbinden.Size = new System.Drawing.Size(128, 22);
             this.tsmiVerbinden.Text = "Verbinden";
             // 
             // tsmiTrennen
             // 
             this.tsmiTrennen.Name = "tsmiTrennen";
-            this.tsmiTrennen.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTrennen.Size = new System.Drawing.Size(128, 22);
             this.tsmiTrennen.Text = "Trennen";
             // 
-            // richTextBox1
+            // rtbSchreiben
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 362);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(361, 66);
-            this.richTextBox1.TabIndex = 9;
-            this.richTextBox1.Text = "";
+            this.rtbSchreiben.Location = new System.Drawing.Point(12, 362);
+            this.rtbSchreiben.Name = "rtbSchreiben";
+            this.rtbSchreiben.Size = new System.Drawing.Size(361, 66);
+            this.rtbSchreiben.TabIndex = 9;
+            this.rtbSchreiben.Text = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(511, 440);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.rtbSchreiben);
             this.Controls.Add(this.rtbNachrichten);
             this.Controls.Add(this.btnSenden);
             this.Controls.Add(this.lbxUserliste);
@@ -137,7 +137,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmVerbindung;
         private System.Windows.Forms.ToolStripMenuItem tsmiVerbinden;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrennen;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox rtbSchreiben;
 
     }
 }
