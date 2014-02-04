@@ -36,6 +36,8 @@
             this.tsmiVerbinden = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTrennen = new System.Windows.Forms.ToolStripMenuItem();
             this.rtbSchreiben = new System.Windows.Forms.RichTextBox();
+            this.tsmiNeueVerbindung = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiServerliste = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,14 +92,17 @@
             // 
             // tsmiVerbinden
             // 
+            this.tsmiVerbinden.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiNeueVerbindung,
+            this.tsmiServerliste});
             this.tsmiVerbinden.Name = "tsmiVerbinden";
-            this.tsmiVerbinden.Size = new System.Drawing.Size(128, 22);
+            this.tsmiVerbinden.Size = new System.Drawing.Size(152, 22);
             this.tsmiVerbinden.Text = "Verbinden";
             // 
             // tsmiTrennen
             // 
             this.tsmiTrennen.Name = "tsmiTrennen";
-            this.tsmiTrennen.Size = new System.Drawing.Size(128, 22);
+            this.tsmiTrennen.Size = new System.Drawing.Size(152, 22);
             this.tsmiTrennen.Text = "Trennen";
             // 
             // rtbSchreiben
@@ -107,6 +112,20 @@
             this.rtbSchreiben.Size = new System.Drawing.Size(361, 66);
             this.rtbSchreiben.TabIndex = 9;
             this.rtbSchreiben.Text = "";
+            // 
+            // tsmiNeueVerbindung
+            // 
+            this.tsmiNeueVerbindung.Name = "tsmiNeueVerbindung";
+            this.tsmiNeueVerbindung.Size = new System.Drawing.Size(167, 22);
+            this.tsmiNeueVerbindung.Text = "Neue Verbindung";
+            this.tsmiNeueVerbindung.Click += new System.EventHandler(this.tsmiNeueVerbindung_Click);
+            // 
+            // tsmiServerliste
+            // 
+            this.tsmiServerliste.Name = "tsmiServerliste";
+            this.tsmiServerliste.Size = new System.Drawing.Size(167, 22);
+            this.tsmiServerliste.Text = "Serverliste";
+            this.tsmiServerliste.Click += new System.EventHandler(this.tsmiServerliste_Click);
             // 
             // Form1
             // 
@@ -138,6 +157,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiVerbinden;
         private System.Windows.Forms.ToolStripMenuItem tsmiTrennen;
         private System.Windows.Forms.RichTextBox rtbSchreiben;
+        private System.Windows.Forms.ToolStripMenuItem tsmiNeueVerbindung;
+        private System.Windows.Forms.ToolStripMenuItem tsmiServerliste;
 
     }
 }
