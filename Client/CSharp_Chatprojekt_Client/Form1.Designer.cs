@@ -34,10 +34,10 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsmVerbindung = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiVerbinden = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiTrennen = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtbSchreiben = new System.Windows.Forms.RichTextBox();
             this.tsmiNeueVerbindung = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiServerliste = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiTrennen = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtbSchreiben = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,6 +58,7 @@
             this.btnSenden.TabIndex = 3;
             this.btnSenden.Text = "Senden";
             this.btnSenden.UseVisualStyleBackColor = true;
+            this.btnSenden.Click += new System.EventHandler(this.btnSenden_Click);
             // 
             // rtbNachrichten
             // 
@@ -99,20 +100,6 @@
             this.tsmiVerbinden.Size = new System.Drawing.Size(152, 22);
             this.tsmiVerbinden.Text = "Verbinden";
             // 
-            // tsmiTrennen
-            // 
-            this.tsmiTrennen.Name = "tsmiTrennen";
-            this.tsmiTrennen.Size = new System.Drawing.Size(152, 22);
-            this.tsmiTrennen.Text = "Trennen";
-            // 
-            // rtbSchreiben
-            // 
-            this.rtbSchreiben.Location = new System.Drawing.Point(12, 362);
-            this.rtbSchreiben.Name = "rtbSchreiben";
-            this.rtbSchreiben.Size = new System.Drawing.Size(361, 66);
-            this.rtbSchreiben.TabIndex = 9;
-            this.rtbSchreiben.Text = "";
-            // 
             // tsmiNeueVerbindung
             // 
             this.tsmiNeueVerbindung.Name = "tsmiNeueVerbindung";
@@ -126,6 +113,21 @@
             this.tsmiServerliste.Size = new System.Drawing.Size(167, 22);
             this.tsmiServerliste.Text = "Serverliste";
             this.tsmiServerliste.Click += new System.EventHandler(this.tsmiServerliste_Click);
+            // 
+            // tsmiTrennen
+            // 
+            this.tsmiTrennen.Name = "tsmiTrennen";
+            this.tsmiTrennen.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTrennen.Text = "Trennen";
+            this.tsmiTrennen.Click += new System.EventHandler(this.tsmiTrennen_Click);
+            // 
+            // rtbSchreiben
+            // 
+            this.rtbSchreiben.Location = new System.Drawing.Point(12, 362);
+            this.rtbSchreiben.Name = "rtbSchreiben";
+            this.rtbSchreiben.Size = new System.Drawing.Size(361, 66);
+            this.rtbSchreiben.TabIndex = 9;
+            this.rtbSchreiben.Text = "";
             // 
             // Form1
             // 

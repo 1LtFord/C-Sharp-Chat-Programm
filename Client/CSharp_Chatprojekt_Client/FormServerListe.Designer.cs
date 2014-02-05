@@ -1,6 +1,6 @@
 ﻿namespace CSharp_Chatprojekt_Client
 {
-    partial class ServerListe
+    partial class FormServerListe
     {
         /// <summary>
         /// Required designer variable.
@@ -37,6 +37,7 @@
             this.lblAktuelleClientsValue = new System.Windows.Forms.Label();
             this.lblMaxClientsValue = new System.Windows.Forms.Label();
             this.lblPingValue = new System.Windows.Forms.Label();
+            this.lblServerStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lbxServerliste
@@ -46,6 +47,7 @@
             this.lbxServerliste.Name = "lbxServerliste";
             this.lbxServerliste.Size = new System.Drawing.Size(125, 160);
             this.lbxServerliste.TabIndex = 0;
+            this.lbxServerliste.SelectedIndexChanged += new System.EventHandler(this.lbxServerliste_SelectedIndexChanged);
             // 
             // lblTextPing
             // 
@@ -76,12 +78,14 @@
             // 
             // btnVerbinden
             // 
+            this.btnVerbinden.Enabled = false;
             this.btnVerbinden.Location = new System.Drawing.Point(181, 137);
             this.btnVerbinden.Name = "btnVerbinden";
             this.btnVerbinden.Size = new System.Drawing.Size(75, 23);
             this.btnVerbinden.TabIndex = 4;
             this.btnVerbinden.Text = "Verbinden";
             this.btnVerbinden.UseVisualStyleBackColor = true;
+            this.btnVerbinden.Click += new System.EventHandler(this.btnVerbinden_Click);
             // 
             // btnAbbrechen
             // 
@@ -120,11 +124,22 @@
             this.lblPingValue.TabIndex = 9;
             this.lblPingValue.Text = "-";
             // 
-            // ServerListe
+            // lblServerStatus
+            // 
+            this.lblServerStatus.AutoSize = true;
+            this.lblServerStatus.ForeColor = System.Drawing.Color.Red;
+            this.lblServerStatus.Location = new System.Drawing.Point(254, 98);
+            this.lblServerStatus.Name = "lblServerStatus";
+            this.lblServerStatus.Size = new System.Drawing.Size(35, 13);
+            this.lblServerStatus.TabIndex = 10;
+            this.lblServerStatus.Text = "offline";
+            // 
+            // FormServerListe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 184);
+            this.Controls.Add(this.lblServerStatus);
             this.Controls.Add(this.lblPingValue);
             this.Controls.Add(this.lblMaxClientsValue);
             this.Controls.Add(this.lblAktuelleClientsValue);
@@ -134,8 +149,8 @@
             this.Controls.Add(this.lblTextMaxClients);
             this.Controls.Add(this.lblTextPing);
             this.Controls.Add(this.lbxServerliste);
-            this.Name = "ServerListe";
-            this.Text = "ServerListe";
+            this.Name = "FormServerListe";
+            this.Text = "Server Liste";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -152,5 +167,6 @@
         private System.Windows.Forms.Label lblAktuelleClientsValue;
         private System.Windows.Forms.Label lblMaxClientsValue;
         private System.Windows.Forms.Label lblPingValue;
+        private System.Windows.Forms.Label lblServerStatus;
     }
 }

@@ -48,6 +48,7 @@
             this.tbxIP.Name = "tbxIP";
             this.tbxIP.Size = new System.Drawing.Size(100, 20);
             this.tbxIP.TabIndex = 0;
+            this.tbxIP.TextChanged += new System.EventHandler(this.tbxIP_TextChanged);
             // 
             // tbxPort
             // 
@@ -55,13 +56,16 @@
             this.tbxPort.Name = "tbxPort";
             this.tbxPort.Size = new System.Drawing.Size(100, 20);
             this.tbxPort.TabIndex = 1;
+            this.tbxPort.TextChanged += new System.EventHandler(this.tbxPort_TextChanged);
             // 
             // tbxBenutzername
             // 
             this.tbxBenutzername.Location = new System.Drawing.Point(132, 116);
+            this.tbxBenutzername.MaxLength = 16;
             this.tbxBenutzername.Name = "tbxBenutzername";
             this.tbxBenutzername.Size = new System.Drawing.Size(100, 20);
             this.tbxBenutzername.TabIndex = 2;
+            this.tbxBenutzername.TextChanged += new System.EventHandler(this.tbxBenutzername_TextChanged);
             // 
             // tbxbenutzerPW
             // 
@@ -70,6 +74,7 @@
             this.tbxbenutzerPW.PasswordChar = '*';
             this.tbxbenutzerPW.Size = new System.Drawing.Size(100, 20);
             this.tbxbenutzerPW.TabIndex = 3;
+            this.tbxbenutzerPW.TextChanged += new System.EventHandler(this.tbxbenutzerPW_TextChanged);
             // 
             // tbxServerPW
             // 
@@ -126,6 +131,7 @@
             // 
             // btnVerbinden
             // 
+            this.btnVerbinden.Enabled = false;
             this.btnVerbinden.Location = new System.Drawing.Point(46, 216);
             this.btnVerbinden.Name = "btnVerbinden";
             this.btnVerbinden.Size = new System.Drawing.Size(75, 23);
@@ -162,7 +168,7 @@
             this.Controls.Add(this.tbxPort);
             this.Controls.Add(this.tbxIP);
             this.Name = "FormNeueVerbindung";
-            this.Text = "FormNeueVerbindung";
+            this.Text = "Neue Verbindung";
             this.ResumeLayout(false);
             this.PerformLayout();
 

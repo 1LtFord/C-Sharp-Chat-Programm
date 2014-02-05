@@ -13,6 +13,8 @@ namespace CSharp_Chatprojekt_Client
 {
     public partial class Form1 : Form
     {
+        private Verbindung connection;
+
         public Form1()
         {
             InitializeComponent();
@@ -21,16 +23,50 @@ namespace CSharp_Chatprojekt_Client
 
         private void tsmiServerliste_Click(object sender, EventArgs e)
         {
-            ServerListe ServerListe1 = new ServerListe();
+            FormServerListe ServerListe1 = new FormServerListe(this);
             ServerListe1.Show();
         }
 
         private void tsmiNeueVerbindung_Click(object sender, EventArgs e)
         {
-            FormNeueVerbindung FormNeueVerbindung1 = new FormNeueVerbindung();
+            FormNeueVerbindung FormNeueVerbindung1 = new FormNeueVerbindung(this);
             FormNeueVerbindung1.Show();
         }
 
+        private void btnSenden_Click(object sender, EventArgs e)
+        {
+            connection.GeschriebeneNachrichtAuswerten(rtbSchreiben.Text);
+        }
 
+        public bool UserVerbinden(string ip, int port, string serverPW, string benutzername, string benutzerPW)
+        {
+            connection = new Verbindung(ip,port,serverPW,benutzername,benutzerPW, lbxUserliste, rtbNachrichten);
+            return connection.Verbunden;
+        }
+
+        public string ServerStatusAbfragen(string ip, int port)
+        {
+            string serverPW = null;
+            string benutzername = "GetServerInfo";
+            string benutzerPW = null;
+            string data;
+            connection = new Verbindung(ip, port, serverPW, benutzername, benutzerPW, lbxUserliste, rtbNachrichten);
+
+            data = Convert.ToString(connection.CurrentClients)+ ";" +Convert.ToString(connection.MaxClients) + ";" + Convert.ToString(connection.Ping) + ";" + Convert.ToString(connection.Verbunden) + ";" + connection.ServerName;
+
+            return data;
+        }
+
+        private void tsmiTrennen_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                connection.Logout();
+            }
+            catch
+            {
+                MessageBox.Show("Sie sind nicht Eingelogt");
+            }
+        }
     }
 }
