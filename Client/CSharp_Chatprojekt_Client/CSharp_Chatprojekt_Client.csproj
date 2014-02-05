@@ -64,7 +64,7 @@
     <Compile Include="ServerListe.Designer.cs">
       <DependentUpon>ServerListe.cs</DependentUpon>
     </Compile>
-    <Compile Include="TCPSenden.cs" />
+    <Compile Include="Verbindung.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

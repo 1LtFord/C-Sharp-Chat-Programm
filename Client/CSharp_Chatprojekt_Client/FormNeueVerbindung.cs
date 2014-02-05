@@ -21,5 +21,11 @@ namespace CSharp_Chatprojekt_Client
         {
             Close();
         }
+
+        private void btnVerbinden_Click(object sender, EventArgs e)
+        {
+           if( Verbindung verbindung = new Verbindung(tbxIP.Text, Convert.ToInt32(tbxPort.Text), tbxServerPW.Text, tbxBenutzername.Text, tbxbenutzerPW.Text);
+           
+        }
     }
 }

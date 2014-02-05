@@ -132,6 +132,7 @@
             this.btnVerbinden.TabIndex = 10;
             this.btnVerbinden.Text = "Verbinden";
             this.btnVerbinden.UseVisualStyleBackColor = true;
+            this.btnVerbinden.Click += new System.EventHandler(this.btnVerbinden_Click);
             // 
             // btnAbbrechen
             // 
