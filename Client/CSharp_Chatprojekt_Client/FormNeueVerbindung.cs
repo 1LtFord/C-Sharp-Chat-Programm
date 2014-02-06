@@ -37,19 +37,18 @@ namespace CSharp_Chatprojekt_Client
             else
             {
                 
-                if (PortIstPort())
-                {
+               // if (PortIstPort())
+               // {
                     if (hauptform.UserVerbinden(tbxIP.Text, Convert.ToInt32(tbxPort.Text), tbxServerPW.Text, tbxBenutzername.Text, tbxbenutzerPW.Text))
                     {
                         ServerSpeichern();
                         Close();
                     }
                 }
-                else
-                {
-                    MessageBox.Show("Mindestens eine Eingabe im Formular ist ungültig");
-                }
-            }
+               // else
+                //{
+                    //MessageBox.Show("Mindestens eine Eingabe im Formular ist ungültig");
+               // }
         }
 
         private bool FormularVollständig()
@@ -136,7 +135,7 @@ namespace CSharp_Chatprojekt_Client
 
         private void ServerDatenSchreiben(string dateipfad)
         {
-            string data = hauptform.ServerStatusAbfragen(tbxIP.Text, Convert.ToInt32(tbxPort));
+            string data = hauptform.ServerStatusAbfragen(tbxIP.Text, Convert.ToInt32(tbxPort.Text));
             string[] daten = data.Split(';');
             StreamWriter sw = new StreamWriter(dateipfad);
             sw.WriteLine(daten[4] + tbxIP.Text + tbxPort.Text);
@@ -147,7 +146,7 @@ namespace CSharp_Chatprojekt_Client
         {
             bool portIsPort = true;
             char[] chartest = tbxPort.Text.ToCharArray();
-            for (int i = 0; i < chartest.Length-2 || portIsPort == true; i++)
+            for (int i = 0; i < chartest.Length-1 || portIsPort == true; i++)
             {
                 if (Char.IsDigit(chartest[i]))
                 {
