@@ -36,10 +36,18 @@ namespace CSharp_Chatprojekt_Client
             }
             else
             {
-                if (hauptform.UserVerbinden(tbxIP.Text, Convert.ToInt32(tbxPort.Text), tbxServerPW.Text, tbxBenutzername.Text, tbxbenutzerPW.Text))
+                
+                if (PortIstPort())
                 {
-                    ServerSpeichern();
-                    Close();
+                    if (hauptform.UserVerbinden(tbxIP.Text, Convert.ToInt32(tbxPort.Text), tbxServerPW.Text, tbxBenutzername.Text, tbxbenutzerPW.Text))
+                    {
+                        ServerSpeichern();
+                        Close();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Mindestens eine Eingabe im Formular ist ungültig");
                 }
             }
         }
@@ -134,6 +142,25 @@ namespace CSharp_Chatprojekt_Client
             sw.WriteLine(daten[4] + tbxIP.Text + tbxPort.Text);
             sw.Close();
         }
+
+        private bool PortIstPort()
+        {
+            bool portIsPort = true;
+            char[] chartest = tbxPort.Text.ToCharArray();
+            for (int i = 0; i < chartest.Length-1 || portIsPort == true; i++)
+            {
+                if (Char.IsDigit(chartest[i]))
+                {
+                    portIsPort = true;
+                }
+                else
+                {
+                    portIsPort = false;
+                }
+            }
+            return portIsPort;
+        }
+
 
     }
 }
