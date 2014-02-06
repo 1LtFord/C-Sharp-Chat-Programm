@@ -28,6 +28,11 @@ namespace CSharp_Chatprojekt_Client
 
         }
 
+        ~Form1()
+        {
+            connection.Logout();
+        }
+
         private void tsmiServerliste_Click(object sender, EventArgs e)
         {
             FormServerListe ServerListe1 = new FormServerListe(this);
@@ -69,6 +74,7 @@ namespace CSharp_Chatprojekt_Client
             try
             {
                 connection.Logout();
+                ServerNachrichtEintragen("Ausgelogt");
             }
             catch
             {
@@ -131,7 +137,8 @@ namespace CSharp_Chatprojekt_Client
         private void ServerInfoInDateiSchreiben()
         {
             string dateipfad = dir + @"ServerListe.csv";
-            
+            bool neuerServer = false;
+
             if (File.Exists(dateipfad))
             {
                 StreamReader sr = new StreamReader(dateipfad);
@@ -144,20 +151,22 @@ namespace CSharp_Chatprojekt_Client
 
                         if (serverinfo[1] != connection.IP)
                         {
-                            sr.Close();
-                            ServerdatenSpeichern(connection.ServerName + ";" + connection.IP + ";" + Convert.ToString(connection.Port));
+                            neuerServer = true;
+                        }
+                        else
+                        {
+                            neuerServer = false;
                         }
                     }
                 }
-                else
-                {
-                    sr.Close();
-                    ServerdatenSpeichern(connection.ServerName + ";" + connection.IP + ";" + Convert.ToString(connection.Port));
-                }
-
-                
+                sr.Close();  
             }
             else
+            {
+                neuerServer = true;
+            }
+
+            if (neuerServer)
             {
                 ServerdatenSpeichern(connection.ServerName + ";" + connection.IP + ";" + Convert.ToString(connection.Port));
             }
@@ -167,11 +176,19 @@ namespace CSharp_Chatprojekt_Client
         {
             try
             {
-                
                 string dateipfad = dir + @"ServerListe.csv";
-                StreamWriter sw = new StreamWriter(dateipfad);
-                sw.WriteLine(serverdaten);
-                sw.Close();
+                if (File.Exists(dateipfad))
+                {
+                    StreamWriter sw = File.AppendText(dateipfad);
+                    sw.WriteLine(serverdaten);
+                    sw.Close();
+                }
+                else
+                {
+                    StreamWriter sw = new StreamWriter(dateipfad);
+                    sw.WriteLine(serverdaten);
+                    sw.Close();
+                }
             }
             catch
             {

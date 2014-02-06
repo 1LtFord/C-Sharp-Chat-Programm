@@ -106,6 +106,7 @@ namespace CSharp_Chatprojekt_Client
                 lblServerStatus.Text = "offline";
                 lblServerStatus.ForeColor = Color.Red;
             }
+            hauptform.Ausloggen();
         }
 
         
