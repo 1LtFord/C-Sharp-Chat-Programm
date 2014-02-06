@@ -13,7 +13,7 @@ namespace ChatServer
         //Ich erzeuge mein Lauscher Klasse in welcher sich der Socket befindet, 
         //der mir die eigtl. Verbindungssockets erzeugt 
         static public Listener listener;
-        static public ServerCmd serverCmd;
+        static public ServerCmd serverCmd=new ServerCmd();
         static public List<Client> clients;
         static public int port = 8;
         static void Main(string[] args)
@@ -40,8 +40,11 @@ namespace ChatServer
         static void client_Received(object sender, byte[] data)
         {
             string argsString=System.Text.Encoding.UTF8.GetString(data);
+
+            Console.WriteLine("Befehl wird ausgeführt" + argsString);
             string[] args = argsString.Split(new char[]{';'});
             Client currClient = (Client)sender;
+            Console.WriteLine("Befehl wird ausgeführt"+args[0]);
             serverCmd.ExecuteCmd(currClient, args);
         }
 

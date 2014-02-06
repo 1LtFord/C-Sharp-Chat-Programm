@@ -66,7 +66,8 @@ namespace ChatServer
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+               // Console.WriteLine(ex.Message);
+                throw ex;
             }
         }
         public event EventHandler<SocketAcceptedEventHandler> SocketAccepted;

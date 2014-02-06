@@ -69,7 +69,7 @@ namespace ChatServer
 
         public void ExecuteCmd(Client currClient, string[] args)
         {
-
+            Console.WriteLine("Bin im ExecuteCmd");
             CurrClientCommand = (ClientCommand)Enum.Parse(typeof(ClientCommand), args[0]);
             args = args.Where(w => w != args[0]).ToArray();
 

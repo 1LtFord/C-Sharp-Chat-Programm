@@ -43,6 +43,7 @@ namespace ChatServer
                     cmdString += args;
                 }
                 byte[] cmdInByte = System.Text.Encoding.UTF8.GetBytes(cmdString);
+                Console.WriteLine("Ich sende zurück");
                 sck.Send(cmdInByte);
             
 
@@ -53,10 +54,10 @@ namespace ChatServer
             try
             {
                 sck.EndReceive(ar);
-                
+
 
                 byte[] buf = new byte[70000];
-                
+
                 int rec = sck.Receive(buf, buf.Length, 0);
                 Array.Resize<byte>(ref buf, rec);
                 if (rec < buf.Length)
@@ -68,11 +69,12 @@ namespace ChatServer
                     Received(this, buf);
                 }
                 isReceiving = true;
-                sck.BeginReceive(new byte[]{0}, 0, 0, 0, callback, null);
+                sck.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                
                 Close();
                 if (Disconnected != null)
                 {
