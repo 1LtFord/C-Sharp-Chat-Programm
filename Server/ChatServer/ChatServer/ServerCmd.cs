@@ -70,7 +70,7 @@ namespace ChatServer
         public void ExecuteCmd(Client currClient, string[] args)
         {
 
-            CurrClientCommand = (ServerCommand)Enum.Parse(typeof(ServerCommand), args[0]);
+            CurrClientCommand = (ClientCommand)Enum.Parse(typeof(ClientCommand), args[0]);
             args = args.Where(w => w != args[0]).ToArray();
 
 
@@ -111,7 +111,7 @@ namespace ChatServer
                 case ClientCommand.getServerInfo:
                     CurrServerCommand = ServerCommand.SendServerInfo;
                     
-                    SendServerInfo(currClient, args);
+                    SendServerInfo(currClient);
                     break;
                 case ClientCommand.getServerReadme:
                     break;

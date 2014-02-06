@@ -147,7 +147,7 @@ namespace CSharp_Chatprojekt_Client
         {
             bool portIsPort = true;
             char[] chartest = tbxPort.Text.ToCharArray();
-            for (int i = 0; i < chartest.Length-1 || portIsPort == true; i++)
+            for (int i = 0; i < chartest.Length-2 || portIsPort == true; i++)
             {
                 if (Char.IsDigit(chartest[i]))
                 {

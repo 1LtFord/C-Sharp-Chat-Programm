@@ -7,7 +7,7 @@ using System.Net.Sockets;
 
 namespace ChatServer
 {
-    class Client
+    public class Client
     {
         public string ID
         {

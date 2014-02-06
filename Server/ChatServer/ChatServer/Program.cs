@@ -12,10 +12,10 @@ namespace ChatServer
     {
         //Ich erzeuge mein Lauscher Klasse in welcher sich der Socket befindet, 
         //der mir die eigtl. Verbindungssockets erzeugt 
-        static Listener listener;
-        static ServerCmd serverCmd;
-        static List<Client> clients;
-        static int port = 8;
+        static public Listener listener;
+        static public ServerCmd serverCmd;
+        static public List<Client> clients;
+        static public int port = 8;
         static void Main(string[] args)
         {
             listener = new Listener(port);
