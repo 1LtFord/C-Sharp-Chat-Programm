@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.Web;
 using System.Timers;
+using System.IO;
 
 namespace CSharp_Chatprojekt_Client
 {
@@ -20,9 +21,7 @@ namespace CSharp_Chatprojekt_Client
             get { return verbunden; }
         }
 
-        private ListBox lbxUserListe;
-
-        private RichTextBox rtbChat;
+        private Form1 hauptform;
 
         private string ip;
         public string IP
@@ -72,6 +71,10 @@ namespace CSharp_Chatprojekt_Client
             get { return currentClients; }
         }
 
+        private bool warten;
+
+        private string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
         private enum befehlslisteClient
         {
             connect,
@@ -120,10 +123,10 @@ namespace CSharp_Chatprojekt_Client
 
         Socket sock;
 
-        public Verbindung(string ip,int port,string serverpasswort, string username, string userpasswort, ListBox lbxUserListe, RichTextBox rtbChat)
+        public Verbindung(string ip,int port,string serverpasswort, string username, string userpasswort, Form1 hauptform)
         {
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
+            GC.SuppressFinalize(sock);
             if (IpUeberpruefen(ip))
             {
                 this.ip = ip;
@@ -135,14 +138,13 @@ namespace CSharp_Chatprojekt_Client
                         this.username = username;
                         this.userpasswort = userpasswort;
                         this.serverpasswort = serverpasswort;
-                        this.rtbChat = rtbChat;
-                        this.lbxUserListe = lbxUserListe;
+                        this.hauptform = hauptform;
                         if (ZuServerVerbinden())
                         {
                             if (Username == "GetServerInfo")
                             {
                                GetServerInfo();
-                                CloseSocket();
+                               sock.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
                             }
                             else
                             {
@@ -173,9 +175,9 @@ namespace CSharp_Chatprojekt_Client
                 sock.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
             }
 
-            catch(Exception ex)
+            catch(Exception exc )
             {
-                
+                return;
             }
         }
 
@@ -298,7 +300,6 @@ namespace CSharp_Chatprojekt_Client
             byte[] bytenachricht = Encoding.UTF8.GetBytes(stringnachricht);
             try
             {
-                MessageBox.Show(stringnachricht);
                 sock.Send(bytenachricht);
             }
             catch
@@ -379,8 +380,8 @@ namespace CSharp_Chatprojekt_Client
                     }
                 case "11":
                     {
-                        MessageBox.Show(recievedUTF8);
                         ServerInfoSpeichern(nachricht);
+                        ServerInfoAnzeigen();
                         break;
                     }
                 case "12":
@@ -445,7 +446,7 @@ namespace CSharp_Chatprojekt_Client
         {
             for (int i = 1; i < text.Length-1; i++)
             {
-               lbxUserListe.Items.Add(UnEscapeString(text[i]));
+               hauptform.UserInListeEintragen(UnEscapeString(text[i]));
             }
         }
 
@@ -466,7 +467,7 @@ namespace CSharp_Chatprojekt_Client
             zeit = UnEscapeString(text[2]);
             userNachricht = UnEscapeString(text[3]);
 
-            rtbChat.AppendText(zeit + " " + user + ": " + userNachricht + "\n");
+            hauptform.UserNachrichtEintragen(zeit + " " + user + ": " + userNachricht + "\n");
         }
 
         private void ServerInfoSpeichern(string[] text)
@@ -474,7 +475,11 @@ namespace CSharp_Chatprojekt_Client
             servername = UnEscapeString(text[1]);
             maxClients = Convert.ToInt32(UnEscapeString(text[2]));
             currentClients = Convert.ToInt32(UnEscapeString(text[3]));
-            MessageBox.Show(servername + maxClients + currentClients);
+        }
+
+        public void ServerInfoAnzeigen()
+        {
+            hauptform.ServerNachrichtEintragen("Server: " + servername + " "  + currentClients + "/" + maxClients + "\n");
         }
 
         private void NachrichtEintragen(string[] text)
@@ -485,12 +490,12 @@ namespace CSharp_Chatprojekt_Client
             zeit = UnEscapeString(text[2]);
             nachricht = UnEscapeString(text[3]);
 
-            rtbChat.AppendText(zeit + " " + user + ": " + nachricht + "\n");
+            hauptform.UserNachrichtEintragen(zeit + " " + user + ": " + nachricht + "\n");
         }
 
         private void ServerIsClosingNachricht(string[] text)
         {
-            rtbChat.AppendText("Server: Server is closing(" + UnEscapeString(text[1]) + ") Connection shutdown...");
+           hauptform.ServerNachrichtEintragen("Server: Server is closing(" + UnEscapeString(text[1]) + ") Connection shutdown...");
         }
 
         private string EscapeString(string text)

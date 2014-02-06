@@ -13,7 +13,7 @@ namespace CSharp_Chatprojekt_Client
 {
     public partial class FormNeueVerbindung : Form
     {
-        private string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        
 
         private Form1 hauptform;
 
@@ -41,7 +41,6 @@ namespace CSharp_Chatprojekt_Client
                // {
                     if (hauptform.UserVerbinden(tbxIP.Text, Convert.ToInt32(tbxPort.Text), tbxServerPW.Text, tbxBenutzername.Text, tbxbenutzerPW.Text))
                     {
-                        ServerSpeichern();
                         Close();
                     }
                 }
@@ -104,44 +103,6 @@ namespace CSharp_Chatprojekt_Client
             btnVerbinden.Enabled = FormularVollständig();
         }
 
-        private void ServerSpeichern()
-        {
-            string dateipfad = dir + @"serverliste.csv";
-            int zaehler=0;
-            if (File.Exists(dateipfad))
-            {
-                StreamReader sr = new StreamReader(dateipfad);
-                for (int i = 0; sr.Peek() != -1; i++)
-                {
-                    sr.ReadLine();
-                    zaehler++;
-                }
-                sr.Close();
-                if (zaehler >= 25)
-                {
-                    MessageBox.Show("Der Server zu dem sie sich verbinden kann nicht in die Liste eingetragen werden. Die Liste ist voll (Maximal 25 Einträge)");
-                }
-                else
-                {
-                    ServerDatenSchreiben(dateipfad);
-                }
-
-            }
-            else
-            {
-                ServerDatenSchreiben(dateipfad);
-            }
-        }
-
-        private void ServerDatenSchreiben(string dateipfad)
-        {
-            string data = hauptform.ServerStatusAbfragen(tbxIP.Text, Convert.ToInt32(tbxPort.Text));
-            string[] daten = data.Split(';');
-            StreamWriter sw = new StreamWriter(dateipfad);
-            sw.WriteLine(daten[4] + tbxIP.Text + tbxPort.Text);
-            sw.Close();
-        }
-
         private bool PortIstPort()
         {
             bool portIsPort = true;
@@ -159,6 +120,8 @@ namespace CSharp_Chatprojekt_Client
             }
             return portIsPort;
         }
+
+        
 
 
     }

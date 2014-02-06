@@ -51,6 +51,7 @@ namespace CSharp_Chatprojekt_Client
                 }
                 sr.Close();
             }
+            
         }
 
         private void ServerEintragen(string server, int index)
@@ -59,6 +60,7 @@ namespace CSharp_Chatprojekt_Client
             ServerListe[index].name = serverInfo[0];
             ServerListe[index].ip = serverInfo[1];
             ServerListe[index].port = serverInfo[2];
+            ServerInListeEintragen(serverInfo[0]);
         }
 
         private void btnVerbinden_Click(object sender, EventArgs e)
@@ -72,10 +74,15 @@ namespace CSharp_Chatprojekt_Client
         {
             for (int i = 0; i <= lbxServerliste.Items.Count - 1; i++)
             {
-                if (lbxServerliste.SelectedItem == ServerListe[i].name)
+                if (Convert.ToString(lbxServerliste.SelectedItem) == ServerListe[i].name)
                     return i;
             }
             return -1;
+        }
+
+        private void ServerInListeEintragen(string servername)
+        {
+            lbxServerliste.Items.Add(servername);
         }
 
         private void lbxServerliste_SelectedIndexChanged(object sender, EventArgs e)

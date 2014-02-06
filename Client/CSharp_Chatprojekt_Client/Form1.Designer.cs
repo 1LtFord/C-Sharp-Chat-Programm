@@ -97,7 +97,7 @@
             this.tsmiNeueVerbindung,
             this.tsmiServerliste});
             this.tsmiVerbinden.Name = "tsmiVerbinden";
-            this.tsmiVerbinden.Size = new System.Drawing.Size(152, 22);
+            this.tsmiVerbinden.Size = new System.Drawing.Size(128, 22);
             this.tsmiVerbinden.Text = "Verbinden";
             // 
             // tsmiNeueVerbindung
@@ -117,7 +117,7 @@
             // tsmiTrennen
             // 
             this.tsmiTrennen.Name = "tsmiTrennen";
-            this.tsmiTrennen.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTrennen.Size = new System.Drawing.Size(128, 22);
             this.tsmiTrennen.Text = "Trennen";
             this.tsmiTrennen.Click += new System.EventHandler(this.tsmiTrennen_Click);
             // 
