@@ -457,6 +457,7 @@ namespace CSharp_Chatprojekt_Client
             servername = UnEscapeString(text[1]);
             maxClients = Convert.ToInt32(UnEscapeString(text[2]));
             currentClients = Convert.ToInt32(UnEscapeString(text[3]));
+            MessageBox.Show(servername + maxClients + currentClients);
         }
 
         private void NachrichtEintragen(string[] text)
