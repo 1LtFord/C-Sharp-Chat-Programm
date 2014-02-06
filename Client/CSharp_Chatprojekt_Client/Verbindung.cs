@@ -467,7 +467,7 @@ namespace CSharp_Chatprojekt_Client
             zeit = UnEscapeString(text[2]);
             userNachricht = UnEscapeString(text[3]);
 
-            hauptform.UserNachrichtEintragen(zeit + " " + user + ": " + userNachricht + "\n");
+            hauptform.UserNachrichtEintragen("[" + zeit + "] " + user + ": " + userNachricht + "\n");
         }
 
         private void ServerInfoSpeichern(string[] text)
