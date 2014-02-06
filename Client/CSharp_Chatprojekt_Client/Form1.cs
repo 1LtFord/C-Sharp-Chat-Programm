@@ -144,16 +144,18 @@ namespace CSharp_Chatprojekt_Client
 
                         if (serverinfo[1] != connection.IP)
                         {
+                            sr.Close();
                             ServerdatenSpeichern(connection.ServerName + ";" + connection.IP + ";" + Convert.ToString(connection.Port));
                         }
                     }
                 }
                 else
                 {
+                    sr.Close();
                     ServerdatenSpeichern(connection.ServerName + ";" + connection.IP + ";" + Convert.ToString(connection.Port));
                 }
 
-                sr.Close();
+                
             }
             else
             {
@@ -163,10 +165,18 @@ namespace CSharp_Chatprojekt_Client
 
         private void ServerdatenSpeichern(string serverdaten)
         {
-            string dateipfad = dir + @"ServerListe.csv";
-            StreamWriter sw = new StreamWriter(dateipfad);
-            sw.WriteLine(serverdaten);
-            sw.Close();
+            try
+            {
+                
+                string dateipfad = dir + @"ServerListe.csv";
+                StreamWriter sw = new StreamWriter(dateipfad);
+                sw.WriteLine(serverdaten);
+                sw.Close();
+            }
+            catch
+            {
+                MessageBox.Show("Der Server konnte nicht in die Serverliste eingetragen werden");
+            }
         }
 
         public void Ausloggen()
