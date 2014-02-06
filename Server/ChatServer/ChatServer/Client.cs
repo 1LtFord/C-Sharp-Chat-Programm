@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
-namespace serverclient
+namespace ChatServer
 {
     class Client
     {
@@ -20,6 +20,7 @@ namespace serverclient
             private set;
         }
         public string UserID;
+        public bool isReceiving = false;
         
         Socket sck;
         public Client(Socket accepted)
@@ -27,7 +28,24 @@ namespace serverclient
             sck = accepted;
             ID = Guid.NewGuid().ToString();
             EndPoint = (IPEndPoint)sck.RemoteEndPoint;
+
+            isReceiving = true;
             sck.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
+        }
+
+        public void Send(int cmdIndex, string args="")
+        {
+            
+                string cmdString = cmdIndex.ToString();
+
+                if (args != "")
+                {
+                    cmdString += args;
+                }
+                byte[] cmdInByte = System.Text.Encoding.UTF8.GetBytes(cmdString);
+                sck.Send(cmdInByte);
+            
+
         }
 
         void callback(IAsyncResult ar)
@@ -35,8 +53,8 @@ namespace serverclient
             try
             {
                 sck.EndReceive(ar);
+                
 
-                List<byte> bufList = new List<byte>();
                 byte[] buf = new byte[70000];
                 
                 int rec = sck.Receive(buf, buf.Length, 0);
@@ -49,6 +67,7 @@ namespace serverclient
                 {
                     Received(this, buf);
                 }
+                isReceiving = true;
                 sck.BeginReceive(new byte[]{0}, 0, 0, 0, callback, null);
             }
             catch (Exception ex)

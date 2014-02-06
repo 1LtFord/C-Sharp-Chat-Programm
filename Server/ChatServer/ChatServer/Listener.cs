@@ -5,7 +5,7 @@ using System.Text;
 using System.Net.Sockets;
 using System.Net;
 
-namespace serverclient
+namespace ChatServer
 {
     public class Listener
     {
