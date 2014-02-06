@@ -168,6 +168,7 @@ namespace CSharp_Chatprojekt_Client
                 Array.Resize<byte>(ref buf, rec);
                 string recievedUTF8 = Encoding.UTF8.GetString(buf);
                 EmpfangenenBefehlSuchen(recievedUTF8);
+                sock.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
             }
 
             catch(Exception ex)
