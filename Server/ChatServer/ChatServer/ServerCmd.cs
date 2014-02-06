@@ -6,73 +6,87 @@ using System.Threading.Tasks;
 
 namespace ChatServer
 {
+    public enum ServerCommand
+    {
+        //Responses of cmd Login(4;Benutzername;BenutzerPW[;ServerPW])
+        isLogged,//(0)
+        WrongPwd,//(1)
+        NewUserRegistered,//(2)
+        ServerIsFull,//(3)
+        ServerIsPrivate,//(4)
+        UserIsBanned,//(5)
+
+        //Response of Cmd getLoggedUserList(6)
+        LoggedUserList, // (6;User;User;User...)
+
+        //Response of Cmd getLatestMsgLog(5)
+        sendLatestMsgLog,//(7; Nachricht(User,Time,Msg);....;..;...)
+        MsgLogRestricted, //(8)
+
+        //Response of Cmd sendMsg(1;msg)
+        MsgAccepted, // (9) 
+
+        //Response of Cmd Disconnect(2)
+        DisconnectReceived, //(10)
+
+        //Response of Cmd getServerInfo(16)
+        SendServerInfo,//(11,serverName,serverMaxUserCount,currentUserCount,)
+
+        spreadMsg, //(12,User,Time,Msg)
+
+        ServerIsClosing, //(13[,ServerMsg])
+
+        WrongArgs,//(14)
+        AlreadyLogged, //(15)
+        NotLoggedIn
+
+    }
+
+    public enum ClientCommand
+    {
+        connect,
+        sendMsg,//(1,Nachricht)
+        disconnect,//(2)
+        changeName,
+        login, // (4;Benutzername;BenutzerPW[;ServerPW])
+        getLatestMsgLog,//(5)
+        getLoggedUserList, //(6)
+        getAllUserList,
+        setMyStatus,
+        getMyStatus,
+        kickUser,
+        banUser,
+        setUserRole,
+        UnbanUser,
+        sendPrivateMsg,
+        changePwd,
+        getServerInfo,//(16)
+        getServerReadme
+
+    }
+
+
     public class ServerCmd
     {
-        public enum ServerCommand 
-        {
-            //Responses of cmd Login(4;Benutzername;BenutzerPW[;ServerPW])
-            isLogged,//(0)
-            WrongPwd,//(1)
-            NewUserRegistered,//(2)
-            ServerIsFull,//(3)
-            ServerIsPrivate,//(4)
-            UserIsBanned,//(5)
 
-            //Response of Cmd getLoggedUserList(6)
-            LoggedUserList, // (6;User;User;User...)
+        public Client CurrClient;
 
-            //Response of Cmd getLatestMsgLog(5)
-            sendLatestMsgLog,//(7; Nachricht(User,Time,Msg);....;..;...)
-            MsgLogRestricted, //(8)
-
-            //Response of Cmd sendMsg(1;msg)
-            MsgAccepted, // (9) 
-
-            //Response of Cmd Disconnect(2)
-            DisconnectReceived, //(10)
-
-            //Response of Cmd getServerInfo(16)
-            SendServerInfo,//(11,serverName,serverMaxUserCount,currentUserCount,)
-
-            spreadMsg, //(12,User,Time,Msg)
-
-            ServerIsClosing //(13[,ServerMsg])
-
-        }
-
-        public enum ClientCommand 
-        {
-            connect,
-            sendMsg,//(1,Nachricht)
-            disconnect,//(2)
-            changeName,
-            login, // (4;Benutzername;BenutzerPW[;ServerPW])
-            getLatestMsgLog,//(5)
-            getLoggedUserList, //(6)
-            getAllUserList,
-            setMyStatus,
-            getMyStatus,
-            kickUser,
-            banUser,
-            setUserRole,
-            UnbanUser,
-            sendPrivateMsg,
-            changePwd,
-            getServerInfo,//(16)
-            getServerReadme
-
-        }
+        public ServerDB CurrServerDB;
 
         public ServerCommand CurrServerCommand = new ServerCommand();
 
+        
         public ClientCommand CurrClientCommand = new ClientCommand();
 
-        public void ExecuteCmd(Client currClient, string[] args)
+        public ServerCmd(ServerDB _currServerDB)
         {
-            Console.WriteLine("Bin im ExecuteCmd");
-            CurrClientCommand = (ClientCommand)Enum.Parse(typeof(ClientCommand), args[0]);
-            args = args.Where(w => w != args[0]).ToArray();
+            this.CurrServerDB = _currServerDB;
+        }
 
+        public void ExecuteCmd(Client _currClient, byte[] _data)
+        {
+            string[] args=this.DecodeCmdStringArray(_data);
+            this.CurrClient = _currClient;
 
             switch (CurrClientCommand)
             {
@@ -85,10 +99,13 @@ namespace ChatServer
                 case ClientCommand.changeName:
                     break;
                 case ClientCommand.login:
+                    Login(args);
                     break;
                 case ClientCommand.getLatestMsgLog:
+                    this.sendLatestMsgLog();
                     break;
                 case ClientCommand.getLoggedUserList:
+                    this.getLoggedUserList();
                     break;
                 case ClientCommand.getAllUserList:
                     break;
@@ -111,7 +128,7 @@ namespace ChatServer
                 case ClientCommand.getServerInfo:
                     CurrServerCommand = ServerCommand.SendServerInfo;
                     
-                    SendServerInfo(currClient);
+                    SendServerInfo();
                     break;
                 case ClientCommand.getServerReadme:
                     break;
@@ -121,6 +138,69 @@ namespace ChatServer
 
 
         }
+
+        private void sendLatestMsgLog()
+        {
+            if ((bool)ServerConfigManager.MyConfigs["PullMsgLogAllowed"])
+            {
+                if (CurrClient.UserID != "")
+                {
+                    string[] msgLog = CurrServerDB.getLatestMsgLog();
+
+                    CurrClient.Send((int)ServerCommand.sendLatestMsgLog, this.ConvertToString(msgLog));
+                }
+                else
+                {
+                    CurrClient.Send((int)ServerCommand.NotLoggedIn);
+                }
+            }
+            else
+            {
+                CurrClient.Send((int)ServerCommand.MsgLogRestricted);
+            }
+        }
+
+        private void getLoggedUserList()
+        {
+            if (CurrClient.UserID != "")
+            {
+
+                string[] userlistAr = CurrServerDB.getLoggedUserList();
+                string userlist = this.ConvertToString(userlistAr);
+                CurrClient.Send((int)ServerCommand.LoggedUserList, userlist);
+            }
+            else {
+                CurrClient.Send((int)ServerCommand.NotLoggedIn);
+            }
+        }
+
+
+        
+
+        private void Login(string[] args)
+        {
+            if (CurrClient.UserID != "") CurrClient.Send((int)ServerCommand.AlreadyLogged); return;
+            if ((bool)ServerConfigManager.MyConfigs["isServerPrivate"]) CurrClient.Send((int)ServerCommand.ServerIsPrivate); return;
+            if(args.Length==2)
+            {
+                string username=args[0];string password=args[1];
+                ServerCommand cmd = CurrServerDB.Login(username, password);
+                if (cmd == ServerCommand.NewUserRegistered) CurrClient.UserID = CurrServerDB.getIdByUsername(username);
+                CurrClient.Send((int)cmd);
+            }else
+	        {
+                Console.WriteLine("Zu viele Parameter beim Login: "+CurrClient.EndPoint.ToString());
+                CurrClient.Send((int)ServerCommand.WrongArgs);
+	        }
+
+        }
+
+        public void LogOff()
+        {
+
+            if(CurrClient.UserID!="")CurrServerDB.LogOff(CurrClient.UserID);
+        }
+
 
         public string ConvertToString(string[] _args)
         {
@@ -132,17 +212,30 @@ namespace ChatServer
             return cmdString;
         }
 
-        public string[] ConvertToStringArray(string _argsInString)
-        {
-            return new string[]{"2"};
-        }
-
-        public void SendServerInfo(Client currClient)
+        public void SendServerInfo()
         {
             
             //(11,serverName,serverMaxUserCount,currentUserCount,)
-            currClient.Send((int)CurrServerCommand,";SkullteriaServer;18;0");
+            CurrClient.Send((int)CurrServerCommand,";SkullteriaServer;18;0");
             
         }
+
+        public string[] DecodeCmdStringArray(byte[] _data)
+        {
+            string argsString = System.Text.Encoding.UTF8.GetString(_data);
+            string[] args = argsString.Split(new char[] { ';' });
+            try
+            {
+                this.CurrClientCommand = (ClientCommand)Enum.Parse(typeof(ClientCommand), args[0]);
+            }
+            catch
+            {
+                Console.WriteLine("Wrong Command Nr: "+args[0]);
+            }
+            args = args.Where(w => w != args[0]).ToArray();
+            return args;
+        }
+
+
     }
 }

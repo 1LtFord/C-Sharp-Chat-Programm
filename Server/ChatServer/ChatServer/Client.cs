@@ -19,7 +19,7 @@ namespace ChatServer
             get;
             private set;
         }
-        public string UserID;
+        public string UserID="";
         public bool isReceiving = false;
         
         Socket sck;
@@ -43,7 +43,7 @@ namespace ChatServer
                     cmdString += args;
                 }
                 byte[] cmdInByte = System.Text.Encoding.UTF8.GetBytes(cmdString);
-                Console.WriteLine("Ich sende zurück");
+                Console.WriteLine("Ich sende zurück: "+this.UserID);
                 sck.Send(cmdInByte);
             
 
