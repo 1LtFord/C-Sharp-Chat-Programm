@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.Web;
+using System.Timers;
 
 namespace CSharp_Chatprojekt_Client
 {
@@ -145,9 +146,9 @@ namespace CSharp_Chatprojekt_Client
                             }
                             else
                             {
-                                GetServerInfo();
-                                Login();
                                 sock.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
+                                GetServerInfo();
+                                LoginTimer();
                             }
                             
                         }
@@ -161,6 +162,7 @@ namespace CSharp_Chatprojekt_Client
         {
             try
             {
+
                 sock.EndReceive(ar);
 
                 byte[] buf = new byte[70000];
@@ -173,7 +175,7 @@ namespace CSharp_Chatprojekt_Client
 
             catch(Exception ex)
             {
-                throw ex;
+                
             }
         }
 
@@ -184,6 +186,18 @@ namespace CSharp_Chatprojekt_Client
                 sock.Shutdown(SocketShutdown.Both);
                 sock.Close();
             }
+        }
+
+        private void LoginTimer()
+        {
+            System.Timers.Timer startTimer = new System.Timers.Timer(1000);
+            startTimer.Elapsed += new ElapsedEventHandler(LoginAusfuehren);
+
+        }
+
+        private void LoginAusfuehren(object source, ElapsedEventArgs e)
+        {
+            Login();
         }
 
         private bool IpUeberpruefen(string ip)
@@ -284,6 +298,7 @@ namespace CSharp_Chatprojekt_Client
             byte[] bytenachricht = Encoding.UTF8.GetBytes(stringnachricht);
             try
             {
+                MessageBox.Show(stringnachricht);
                 sock.Send(bytenachricht);
             }
             catch
@@ -364,6 +379,7 @@ namespace CSharp_Chatprojekt_Client
                     }
                 case "11":
                     {
+                        MessageBox.Show(recievedUTF8);
                         ServerInfoSpeichern(nachricht);
                         break;
                     }
