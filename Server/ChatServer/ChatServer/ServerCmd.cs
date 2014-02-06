@@ -132,9 +132,13 @@ namespace ChatServer
             return cmdString;
         }
 
+        public string[] ConvertToStringArray(string _argsInString)
+        {
+            return new string[]{"2"};
+        }
+
         public void SendServerInfo(Client currClient)
         {
-            
             
             //(11,serverName,serverMaxUserCount,currentUserCount,)
             currClient.Send((int)CurrServerCommand,";SkullteriaServer;18;0");
