@@ -178,5 +178,34 @@ namespace ChatServer
             reader.Read();
             return reader.GetInt16(0);
         }
+
+        public bool AddMsg(string p, string msg)
+        {
+            this.clearCmd();
+            cmd.CommandText = "insert into msgLog values("+p+","+msg+",null);";
+            bool isInserted = Convert.ToBoolean(cmd.ExecuteNonQuery());
+            if (isInserted)
+            {
+                Console.WriteLine("Neue Nachricht wurde hinzugefügt von "+this.getUsernameById(Convert.ToInt16(p)));
+                return true;
+            }
+            return false;
+        }
+        public string[] getLatestMsgFromUser(string uid)
+        {
+            
+            this.clearCmd();
+            string username = this.getUsernameById(Convert.ToInt16(uid));
+            string[] msgAr = new string[3];
+            msgAr[0] = Uri.EscapeDataString(username);
+
+            cmd.CommandText="Select msg,sendTimestamp from msgLog where userid="+uid+" ORDER BY sendTimestamp DESC LIMIT 0,1";
+
+            reader=cmd.ExecuteReader();
+            reader.Read();
+            msgAr[1] = Uri.EscapeDataString(reader.GetString(0));
+            msgAr[2] = Uri.EscapeDataString(Convert.ToString(reader.GetDateTime(1)));
+            return msgAr;
+        }
     }
 }

@@ -93,6 +93,7 @@ namespace ChatServer
                 case ClientCommand.connect:
                     break;
                 case ClientCommand.sendMsg:
+                    getMsg(args);
                     break;
                 case ClientCommand.disconnect:
                     break;
@@ -137,6 +138,36 @@ namespace ChatServer
 
 
         }
+
+        private void getMsg(string[] args)
+        {
+            if (CurrClient.UserID != "")
+            {
+                string msg=Uri.UnescapeDataString(args[0]);
+                bool NewMsg=CurrServerDB.AddMsg(CurrClient.UserID, msg);
+                if (NewMsg) 
+                {
+                    CurrClient.Send((int)ServerCommand.MsgAccepted);
+                    SpreadMsg(CurrServerDB.getLatestMsgFromUser(CurrClient.UserID));
+                }
+            }
+            else
+            {
+                CurrClient.Send((int)ServerCommand.NotLoggedIn);
+            }
+        }
+
+        private void SpreadMsg(string[] p)
+        {
+            string args=this.ConvertToString(p);
+            foreach (var item in Program.clients) 
+            {
+                item.Send((int)ServerCommand.spreadMsg, args);
+            }
+
+        }
+
+        
 
         private void sendLatestMsgLog()
         {
