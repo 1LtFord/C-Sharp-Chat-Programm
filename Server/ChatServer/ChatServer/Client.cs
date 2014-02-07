@@ -44,6 +44,8 @@ namespace ChatServer
                 }
                 byte[] cmdInByte = System.Text.Encoding.UTF8.GetBytes(cmdString);
                 Console.WriteLine("Ich sende zurück: "+cmdString);
+                //sck.Connected = true;
+                sck.SendTimeout = 100000;
                 sck.Send(cmdInByte);
             
 

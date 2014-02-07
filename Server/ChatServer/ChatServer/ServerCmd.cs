@@ -160,9 +160,9 @@ namespace ChatServer
         private void SpreadMsg(string[] p)
         {
             string args=this.ConvertToString(p);
-            foreach (var item in Program.clients) 
+            for (int i = 0;i < Program.clients.Count;i++ )
             {
-                item.Send((int)ServerCommand.spreadMsg, args);
+                Program.clients[i].Send((int)ServerCommand.spreadMsg, args);
             }
 
         }
