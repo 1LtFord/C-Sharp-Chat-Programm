@@ -20,6 +20,7 @@ namespace ChatServer
             private set;
         }
         public string UserID="";
+        public int indexOffset;
         public bool isReceiving = false;
         
         Socket sck;
@@ -45,7 +46,7 @@ namespace ChatServer
                 byte[] cmdInByte = System.Text.Encoding.UTF8.GetBytes(cmdString);
                 Console.WriteLine("Ich sende zurück: "+cmdString);
                 //sck.Connected = true;
-                sck.SendTimeout = 100000;
+                //sck.SendTimeout = 10;
                 sck.Send(cmdInByte);
             
 

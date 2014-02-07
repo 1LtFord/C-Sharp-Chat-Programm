@@ -48,13 +48,14 @@ namespace ChatServer
             Console.WriteLine("New Connection: {0}\n{1}\n===========", e.Accepted.RemoteEndPoint, DateTime.Now);
             clients.Add(new Client(e.Accepted));
             int currIndex = clients.Count - 1;
+            clients[currIndex].indexOffset = currIndex;
             clients[currIndex].Received += new Client.ClientReceivedHandler(client_Received);
             clients[currIndex].Disconnected += new Client.ClientDisconnectedHandler(client_Disconnected);
         }
 
         static void client_Received(object sender, byte[] data)
         {
-            
+            Console.WriteLine("Etwas kommt: "+Encoding.UTF8.GetString(data));
             Client currClient = (Client)sender;
             serverCmd.ExecuteCmd(currClient, data);
         }
