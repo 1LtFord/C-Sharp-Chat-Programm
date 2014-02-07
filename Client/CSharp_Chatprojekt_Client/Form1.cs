@@ -96,6 +96,7 @@ namespace CSharp_Chatprojekt_Client
             else
             {
                 rtbNachrichten.AppendText(nachricht);
+                rtbSchreiben.Clear();
             }
         }
 
@@ -116,6 +117,23 @@ namespace CSharp_Chatprojekt_Client
                 rtbNachrichten.SelectionColor = Color.Gray;
                 rtbNachrichten.AppendText(nachricht);
                 rtbNachrichten.SelectionColor = rtbNachrichten.ForeColor;
+            }
+        }
+
+        public delegate void ChatClearDelegate();
+
+        public void ChatClear()
+        {
+
+            if (rtbNachrichten.InvokeRequired)
+            {
+                rtbNachrichten.Invoke(new ChatClearDelegate(ChatClear),
+                    null);
+            }
+            else
+            {
+                rtbNachrichten.Clear();
+                rtbSchreiben.Clear();
             }
         }
 
