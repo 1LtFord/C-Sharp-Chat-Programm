@@ -52,7 +52,7 @@ namespace ChatServer
                 MyConfigs.Add("isBlackListActivated", false);
                 MyConfigs.Add("ServerName", "C#-ChatServer");
                 MyConfigs.Add("Description", "Copyright by Ferhat Catak");
-                SaveMyConfigs();
+                MyConfigs.Add("port",8);
             }
         }
 

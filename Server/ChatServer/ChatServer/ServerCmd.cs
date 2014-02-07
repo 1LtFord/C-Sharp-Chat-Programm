@@ -168,10 +168,11 @@ namespace ChatServer
         private void SpreadMsg(string[] p)
         {
             string args=this.ConvertToString(p);
-            for (int i = 0;i < Program.clients.Count;i++ )
+            for (int i = 0; i < Program.clients.Count; i++)
             {
                 Program.clients[i].Send((int)ServerCommand.spreadMsg, args);
             }
+            //CurrClient.Send((int)ServerCommand.spreadMsg, args);
 
         }
 
