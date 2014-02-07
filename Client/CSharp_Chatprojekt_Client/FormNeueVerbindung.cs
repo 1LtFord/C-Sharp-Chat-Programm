@@ -135,11 +135,11 @@ namespace CSharp_Chatprojekt_Client
 
         private void ServerDatenSchreiben(string dateipfad)
         {
-            string data = hauptform.ServerStatusAbfragen(tbxIP.Text, Convert.ToInt32(tbxPort.Text));
+            /*string data = hauptform.ServerStatusAbfragen(tbxIP.Text, Convert.ToInt32(tbxPort.Text));
             string[] daten = data.Split(';');
             StreamWriter sw = new StreamWriter(dateipfad);
             sw.WriteLine(daten[4] + tbxIP.Text + tbxPort.Text);
-            sw.Close();
+            sw.Close();*/
         }
 
         private bool PortIstPort()

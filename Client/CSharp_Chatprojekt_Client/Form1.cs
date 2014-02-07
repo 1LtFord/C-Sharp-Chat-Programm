@@ -40,7 +40,7 @@ namespace CSharp_Chatprojekt_Client
 
         public bool UserVerbinden(string ip, int port, string serverPW, string benutzername, string benutzerPW)
         {
-            connection = new Verbindung(ip,port,serverPW,benutzername,benutzerPW, lbxUserliste, rtbNachrichten);
+            connection = new Verbindung(ip,port,serverPW,benutzername,benutzerPW, this);
             return connection.Verbunden;
         }
 
@@ -50,7 +50,7 @@ namespace CSharp_Chatprojekt_Client
             string benutzername = "GetServerInfo";
             string benutzerPW = null;
             string data;
-            connection = new Verbindung(ip, port, serverPW, benutzername, benutzerPW, lbxUserliste, rtbNachrichten);
+            connection = new Verbindung(ip, port, serverPW, benutzername, benutzerPW,this);
 
             data = Convert.ToString(connection.CurrentClients)+ ";" +Convert.ToString(connection.MaxClients) + ";" + Convert.ToString(connection.Ping) + ";" + Convert.ToString(connection.Verbunden) + ";" + connection.ServerName;
 
@@ -68,5 +68,56 @@ namespace CSharp_Chatprojekt_Client
                 MessageBox.Show("Sie sind nicht Eingelogt");
             }
         }
+
+        public delegate void UserInListeEintragenDelegate(string user);
+
+        public void UserInListeEintragen(string user)
+        {
+            if (InvokeRequired)
+            {
+                lbxUserliste.Invoke(new UserInListeEintragenDelegate(UserInListeEintragen),
+                    new object[] { user });
+            }
+            else
+            {
+                lbxUserliste.Items.Add(user);
+            }
+        }
+
+        public delegate void UserNachrichtEintragenDelegate(string text);
+
+        public void UserNachrichtEintragen(string nachricht)
+        {
+            if (rtbNachrichten.InvokeRequired)
+            {
+                rtbNachrichten.Invoke(new UserNachrichtEintragenDelegate(UserNachrichtEintragen),
+                    new object[] { nachricht });
+            }
+            else
+            {
+                rtbNachrichten.AppendText(nachricht);
+            }
+        }
+
+        public delegate void ServerNachrichtEintragenDelegate(string text);
+
+        public void ServerNachrichtEintragen(string nachricht)
+        {
+            if (rtbNachrichten.InvokeRequired)
+            {
+                rtbNachrichten.Invoke(new ServerNachrichtEintragenDelegate(ServerNachrichtEintragen),
+                    new object[] { nachricht });
+            }
+            else
+            {
+                rtbNachrichten.SelectionStart = rtbNachrichten.TextLength;
+                rtbNachrichten.SelectionLength = 0;
+
+                rtbNachrichten.SelectionColor = Color.Gray;
+                rtbNachrichten.AppendText(nachricht);
+                rtbNachrichten.SelectionColor = rtbNachrichten.ForeColor;
+            }
+        }
+
     }
 }
