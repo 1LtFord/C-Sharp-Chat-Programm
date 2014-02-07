@@ -114,14 +114,15 @@ namespace ChatServer
 
         public string getUsernameById(int _clientId)
         {
+            this.clearCmd();
             SQLiteCommand cmd2=new SQLiteCommand(con);
-            cmd2.CommandText = "Select username from client where id=" + _clientId + ";";
-            SQLiteDataReader reader2 = cmd.ExecuteReader();
+            cmd2.CommandText = "Select username from client where id=" + _clientId.ToString() + ";";
+            SQLiteDataReader reader2 = cmd2.ExecuteReader();
             reader2.Read();
-            string username=reader2["username"].ToString();
+            string username=reader2.GetString(0);
             reader2.Close();
             reader2.Dispose();
-            cmd.Dispose();
+            cmd2.Dispose();
             return username;
         }
 
@@ -182,7 +183,7 @@ namespace ChatServer
         public bool AddMsg(string p, string msg)
         {
             this.clearCmd();
-            cmd.CommandText = "insert into msgLog values("+p+","+msg+",null);";
+            cmd.CommandText = "insert into msgLog values(null,'"+p+"','"+msg+"',CURRENT_TIMESTAMP);";
             bool isInserted = Convert.ToBoolean(cmd.ExecuteNonQuery());
             if (isInserted)
             {
