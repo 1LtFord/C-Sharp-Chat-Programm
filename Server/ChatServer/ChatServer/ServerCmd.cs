@@ -126,7 +126,6 @@ namespace ChatServer
                 case ClientCommand.changePwd:
                     break;
                 case ClientCommand.getServerInfo:
-                    CurrServerCommand = ServerCommand.SendServerInfo;
                     
                     SendServerInfo();
                     break;
@@ -179,13 +178,14 @@ namespace ChatServer
 
         private void Login(string[] args)
         {
-            if (CurrClient.UserID != "") CurrClient.Send((int)ServerCommand.AlreadyLogged); return;
-            if ((bool)ServerConfigManager.MyConfigs["isServerPrivate"]) CurrClient.Send((int)ServerCommand.ServerIsPrivate); return;
+            if (CurrClient.UserID != ""){ CurrClient.Send((int)ServerCommand.AlreadyLogged); return;}
+            if ((bool)ServerConfigManager.MyConfigs["isServerPrivate"]) { CurrClient.Send((int)ServerCommand.ServerIsPrivate); return; }
             if(args.Length==2)
             {
                 string username=args[0];string password=args[1];
                 ServerCommand cmd = CurrServerDB.Login(username, password);
-                if (cmd == ServerCommand.NewUserRegistered) CurrClient.UserID = CurrServerDB.getIdByUsername(username);
+                if (cmd == ServerCommand.isLogged) CurrClient.UserID = CurrServerDB.getIdByUsername(username).ToString();
+                if (cmd == ServerCommand.NewUserRegistered) CurrClient.UserID = CurrServerDB.getIdByUsername(username).ToString();
                 CurrClient.Send((int)cmd);
             }else
 	        {
@@ -216,7 +216,7 @@ namespace ChatServer
         {
             
             //(11,serverName,serverMaxUserCount,currentUserCount,)
-            CurrClient.Send((int)CurrServerCommand,";SkullteriaServer;18;0");
+            CurrClient.Send((int)ServerCommand.SendServerInfo, ";" + ServerConfigManager.MyConfigs["ServerName"] + ";" + ServerConfigManager.MyConfigs["maxUserCount"] + ";" + CurrServerDB.getLoggedUserCount().ToString());
             
         }
 

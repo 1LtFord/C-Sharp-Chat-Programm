@@ -43,7 +43,7 @@ namespace ChatServer
                     cmdString += args;
                 }
                 byte[] cmdInByte = System.Text.Encoding.UTF8.GetBytes(cmdString);
-                Console.WriteLine("Ich sende zurück: "+this.UserID);
+                Console.WriteLine("Ich sende zurück: "+cmdString);
                 sck.Send(cmdInByte);
             
 

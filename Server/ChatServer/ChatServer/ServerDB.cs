@@ -23,6 +23,7 @@ namespace ChatServer
 
         public ServerCommand Login(string _username,string _password)
         {
+            this.clearCmd();
             cmd.CommandText = "select count(id) as myCount,id from client where username='"+_username+"';";
 
             SQLiteDataReader reader = cmd.ExecuteReader();
@@ -50,8 +51,9 @@ namespace ChatServer
                 //Passwort ist richtig
                 if (reader.GetInt16(0) != 0)
                 {
-                    return ServerCommand.isLogged;
                     Console.WriteLine("Richtiges PW");
+                    this.setUserLogged(_username);
+                    return ServerCommand.isLogged;
                 }
                 else {
                     return ServerCommand.WrongPwd;
@@ -61,9 +63,19 @@ namespace ChatServer
             return 0;
         }
 
+        private void setUserLogged(string _username)
+        {
+            clearCmd();
+            cmd.CommandText="UPDATE client set isLogged=1 where username='"+_username+"';";
+            cmd.ExecuteNonQuery();
+        }
+
+
+
         public void LogOff(string _UserID)
         {
-            cmd.CommandText = "Update client set isLogged=0";
+            this.clearCmd();
+            cmd.CommandText = "Update client set isLogged=0 where id="+_UserID+";";
             cmd.ExecuteNonQuery();
         }
 
@@ -83,13 +95,13 @@ namespace ChatServer
             
         }
 
-        public string getIdByUsername(string _username)
+        public int getIdByUsername(string _username)
         {
             this.clearCmd();
-            cmd.CommandText = "Select id from client where username=" + _username + ";";
+            cmd.CommandText = "Select id from client where username='" + _username + "';";
             reader = cmd.ExecuteReader();
             reader.Read();
-            return reader.GetString(0);
+            return reader.GetInt16(0);
 
 
         }
@@ -97,7 +109,6 @@ namespace ChatServer
         private void clearCmd()
         {
             cmd.Dispose();
-            reader.Close();
             cmd = new SQLiteCommand(con);
         }
 
@@ -156,6 +167,16 @@ namespace ChatServer
 
             cmd.CommandText = "insert into msgLog values(null," + _userId + "," + _msg + ",null);";
             return Convert.ToBoolean(cmd.ExecuteNonQuery());
+        }
+
+
+        public int getLoggedUserCount()
+        {
+            this.clearCmd();
+            cmd.CommandText = "select count(id) from client where isLogged=1;";
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            return reader.GetInt16(0);
         }
     }
 }
