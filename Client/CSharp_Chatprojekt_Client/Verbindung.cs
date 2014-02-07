@@ -148,7 +148,7 @@ namespace CSharp_Chatprojekt_Client
                             {
                                 sock.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
                                 GetServerInfo();
-                                LoginTimer();
+                                Login();
                             }
                             
                         }
