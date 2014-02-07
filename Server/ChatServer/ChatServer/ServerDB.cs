@@ -33,7 +33,7 @@ namespace ChatServer
             if (reader.GetInt16(0) == 0)
             {
                 reader.Close();
-                cmd.CommandText = "insert into client values(null,'" + _username + "','" + _password + "',null,null,1,'abwesend')";
+                cmd.CommandText = "insert into client values(null,'" + _username + "','" + _password + "',0,CURRENT_DATE,1,'abwesend');";
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("add new User: " +_username );
                 return ServerCommand.NewUserRegistered;
