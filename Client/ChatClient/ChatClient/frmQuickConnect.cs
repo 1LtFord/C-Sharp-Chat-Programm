@@ -30,6 +30,8 @@ namespace ChatClient
                 myClient.connectedServer.getServerInfo();
                 lblConnectionState.Text = "Connected";
                 lblConnectionState.ForeColor = Color.LightGreen;
+
+                
             }
             catch(Exception)   
             {

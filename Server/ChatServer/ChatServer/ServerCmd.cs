@@ -144,9 +144,9 @@ namespace ChatServer
 
         private void disconnectUser()
         {
-            if (CurrClient.UserID != "") CurrServerDB.LogOff(CurrClient.UserID);
-            CurrClient.Close();
-            Program.clients.RemoveAt(CurrClient.indexOffset);
+            //if (CurrClient.UserID != "") CurrServerDB.LogOff(CurrClient.UserID);
+            //CurrClient.Close();
+            //Program.clients.RemoveAt(CurrClient.indexOffset);
         }
 
         private void getMsg(string[] args)

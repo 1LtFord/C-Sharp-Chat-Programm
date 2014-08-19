@@ -80,7 +80,7 @@ namespace ChatClient
             sblConnectionStatus.Visible = true;
             sblConnectionStatus.Text = "Connected";
             sblConnectionStatus.ForeColor = Color.LightGreen;
-            tsmiQuickConnect.Enabled = false;
+
         }
 
         public delegate void server_DisconnectedDlg(Server sender);
@@ -104,6 +104,10 @@ namespace ChatClient
 
         private void tsmiQuickConnect_Click(object sender, EventArgs e)
         {
+            if (myClient.connectedServer.Connection.Connected)
+            {
+                myClient.connectedServer.Disconnect();
+            }
             frmQuickConnect qcWindow = new frmQuickConnect(myClient);
             qcWindow.ShowDialog();
         }

@@ -64,10 +64,8 @@ namespace ChatServer
                 Array.Resize<byte>(ref buf, size);
 
                 if (buf.Length == 0) this.Close();
-
-                Received(this, buf);
-
                 sck.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
+                Received(this, buf);
             }
             catch (Exception ex)
             {

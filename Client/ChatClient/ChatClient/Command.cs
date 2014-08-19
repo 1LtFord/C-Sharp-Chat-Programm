@@ -133,7 +133,7 @@ namespace ChatClient
         public void fetchCmd(string _CmdString)
         {
             string[] buff = _CmdString.Split(';');
-            ClientCmd cmd = (ClientCmd)Enum.Parse(typeof(ClientCmd), buff[0]);
+            ServerCmd cmd = (ServerCmd)Enum.Parse(typeof(ServerCmd), buff[0]);
             Args = buff.Where(w => w != buff[0]).ToList<string>();
         }
 

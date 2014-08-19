@@ -398,14 +398,15 @@ namespace CSharp_Chatprojekt_Client
         {
             if (sock.Connected)
             {
-                sock.Shutdown(SocketShutdown.Both);
+                //sock.Shutdown(SocketShutdown.Both);
                 sock.Close();
+                sock.Dispose();
             }
         }
 
         private void GetUserliste()
         {
-            hauptform.ServerNachrichtEintragen("Eingelogt\n");
+            hauptform.ServerNachrichtEintragen("Eingeloggt\n");
             sock.Send(Encoding.UTF8.GetBytes("6"));
             
         }

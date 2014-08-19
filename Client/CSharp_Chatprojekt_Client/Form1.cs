@@ -46,13 +46,7 @@ namespace CSharp_Chatprojekt_Client
 
         public string ServerStatusAbfragen(string ip, int port)
         {
-            string serverPW = null;
-            string benutzername = "GetServerInfo";
-            string benutzerPW = null;
-            string data;
-            connection = new Verbindung(ip, port, serverPW, benutzername, benutzerPW,this);
-
-            data = Convert.ToString(connection.CurrentClients)+ ";" +Convert.ToString(connection.MaxClients) + ";" + Convert.ToString(connection.Ping) + ";" + Convert.ToString(connection.Verbunden) + ";" + connection.ServerName;
+            string data = Convert.ToString(connection.CurrentClients)+ ";" +Convert.ToString(connection.MaxClients) + ";" + Convert.ToString(connection.Ping) + ";" + Convert.ToString(connection.Verbunden) + ";" + connection.ServerName;
 
             return data;
         }
@@ -65,7 +59,7 @@ namespace CSharp_Chatprojekt_Client
             }
             catch
             {
-                MessageBox.Show("Sie sind nicht Eingelogt");
+                MessageBox.Show("Sie sind nicht Eingeloggt");
             }
         }
 
@@ -134,6 +128,7 @@ namespace CSharp_Chatprojekt_Client
             {
                 rtbNachrichten.Clear();
                 rtbSchreiben.Clear();
+                lbxUserliste.Items.Clear();
             }
         }
 
