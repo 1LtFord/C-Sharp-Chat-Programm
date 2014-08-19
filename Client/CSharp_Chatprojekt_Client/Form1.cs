@@ -13,7 +13,7 @@ namespace CSharp_Chatprojekt_Client
 {
     public partial class Form1 : Form
     {
-        private Verbindung connection;
+        public Verbindung connection;
 
         public Form1()
         {

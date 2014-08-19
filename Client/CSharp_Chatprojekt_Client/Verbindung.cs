@@ -12,7 +12,7 @@ using System.Timers;
 
 namespace CSharp_Chatprojekt_Client
 {
-    class Verbindung
+    public class Verbindung
     {
         private bool login = false;
 
@@ -146,6 +146,7 @@ namespace CSharp_Chatprojekt_Client
                             else
                             {
                                 login = true;
+                                Login();
                                 sock.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
                                 GetServerInfo();
                             }
@@ -470,11 +471,6 @@ namespace CSharp_Chatprojekt_Client
         private void ServerInfoSpeichern(string[] text)
         {
 
-            if (login)
-            {
-                Login();
-            }
-
             servername = UnEscapeString(text[1]);
             maxClients = Convert.ToInt32(UnEscapeString(text[2]));
             currentClients = Convert.ToInt32(UnEscapeString(text[3]));
@@ -482,11 +478,12 @@ namespace CSharp_Chatprojekt_Client
 
         private void NachrichtEintragen(string[] text)
         {
+            //(12,User,Time,Msg)
             string user, zeit, nachricht;
 
-            user = UnEscapeString(text[0]);
-            zeit = UnEscapeString(text[1]);
-            nachricht = UnEscapeString(text[2]);
+            user = UnEscapeString(text[1]);
+            zeit = UnEscapeString(text[2]);
+            nachricht = UnEscapeString(text[3]);
 
             hauptform.UserNachrichtEintragen(zeit + " " + user + ": " + nachricht + "\n");
         }

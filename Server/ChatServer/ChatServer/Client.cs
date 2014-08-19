@@ -21,16 +21,14 @@ namespace ChatServer
         }
         public string UserID="";
         public int indexOffset;
-        public bool isReceiving = false;
         
-        Socket sck;
-        public Client(Socket accepted)
+        public Socket sck;
+        public Client(Socket acceptedSck)
         {
-            sck = accepted;
+            sck = acceptedSck;
             ID = Guid.NewGuid().ToString();
-            EndPoint = (IPEndPoint)sck.RemoteEndPoint;
 
-            isReceiving = true;
+            
             sck.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
         }
 
@@ -59,30 +57,27 @@ namespace ChatServer
                 sck.EndReceive(ar);
 
 
-                byte[] buf = new byte[70000];
+                byte[] buf = new byte[sck.ReceiveBufferSize];
+                
+                int size = sck.Receive(buf, buf.Length, 0);
 
-                int rec = sck.Receive(buf, buf.Length, 0);
-                Array.Resize<byte>(ref buf, rec);
-                if (rec < buf.Length)
-                {
-                    Received(this, buf);
-                }
-                if (Received != null)
-                {
-                    Received(this, buf);
-                }
-                isReceiving = true;
+                Array.Resize<byte>(ref buf, size);
+
+                if (buf.Length == 0) this.Close();
+
+                Received(this, buf);
+
                 sck.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                
-                Close();
                 if (Disconnected != null)
                 {
                     Disconnected(this);
                 }
+                Close();
+                
             }
         }
 
@@ -90,12 +85,14 @@ namespace ChatServer
         {
             sck.Close();
             sck.Dispose();
+            
         }
+
+        public event ClientReceivedHandler Received;
+        public event ClientDisconnectedHandler Disconnected;
 
         public delegate void ClientReceivedHandler(Client sender, byte[] data);
         public delegate void ClientDisconnectedHandler(Client sender);
 
-        public event ClientReceivedHandler Received;
-        public event ClientDisconnectedHandler Disconnected;
     }
 }

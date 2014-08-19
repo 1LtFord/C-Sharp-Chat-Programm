@@ -53,18 +53,20 @@ namespace ChatServer
                 MyConfigs.Add("ServerName", "C#-ChatServer");
                 MyConfigs.Add("Description", "Copyright by Ferhat Catak");
                 MyConfigs.Add("port",8);
+
+                SaveMyConfigs();
             }
         }
 
        
         public static void SaveMyConfigs()
         {
-            FileStream fs= File.Create(ConfigPath);
-            fs.Close();
-            fs.Dispose();
 
-            if (File.Exists(ConfigPath))
+
+            if (!File.Exists(ConfigPath))
             {
+                File.Create(ConfigPath).Close(); 
+            }
                 using (StreamWriter sw = File.AppendText(ConfigPath))
                 {
                     foreach (DictionaryEntry entry in MyConfigs)
@@ -74,7 +76,8 @@ namespace ChatServer
                     sw.Close();
                     sw.Dispose();
                 }
-            }
+            
+            
         }
     }
 }

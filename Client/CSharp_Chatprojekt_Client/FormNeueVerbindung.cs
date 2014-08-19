@@ -30,25 +30,21 @@ namespace CSharp_Chatprojekt_Client
 
         private void btnVerbinden_Click(object sender, EventArgs e)
         {
-            if (tbxBenutzername.Text == "GetServerInfo")
+
+
+            
+            if (hauptform.UserVerbinden(tbxIP.Text, Convert.ToInt32(tbxPort.Text), tbxServerPW.Text, tbxBenutzername.Text, tbxbenutzerPW.Text))
             {
-                MessageBox.Show("Der Benutzername ist ungültig. Er entspricht einem Programmwert");
+                ServerSpeichern();
+                Close();
             }
             else
             {
-                
-               // if (PortIstPort())
-               // {
-                    if (hauptform.UserVerbinden(tbxIP.Text, Convert.ToInt32(tbxPort.Text), tbxServerPW.Text, tbxBenutzername.Text, tbxbenutzerPW.Text))
-                    {
-                        ServerSpeichern();
-                        Close();
-                    }
-                }
-               // else
-                //{
-                    //MessageBox.Show("Mindestens eine Eingabe im Formular ist ungültig");
-               // }
+                MessageBox.Show("Die Verbindung is gescheitert!","Verbindungsfehler",MessageBoxButtons.AbortRetryIgnore,MessageBoxIcon.Error);
+            }
+
+           
+
         }
 
         private bool FormularVollständig()
@@ -106,40 +102,27 @@ namespace CSharp_Chatprojekt_Client
 
         private void ServerSpeichern()
         {
-            string dateipfad = dir + @"serverliste.csv";
+            string dateipfad = dir+"\\" + @"serverliste.csv";
             int zaehler=0;
-            if (File.Exists(dateipfad))
+            if (!File.Exists(dateipfad))
             {
-                StreamReader sr = new StreamReader(dateipfad);
-                for (int i = 0; sr.Peek() != -1; i++)
-                {
-                    sr.ReadLine();
-                    zaehler++;
-                }
-                sr.Close();
-                if (zaehler >= 25)
-                {
-                    MessageBox.Show("Der Server zu dem sie sich verbinden kann nicht in die Liste eingetragen werden. Die Liste ist voll (Maximal 25 Einträge)");
-                }
-                else
-                {
-                    ServerDatenSchreiben(dateipfad);
-                }
+                File.Create(dateipfad).Close();
+            }
+   
+            ServerDatenSchreiben(dateipfad);
+                
 
-            }
-            else
-            {
-                ServerDatenSchreiben(dateipfad);
-            }
+            
         }
 
         private void ServerDatenSchreiben(string dateipfad)
         {
-            /*string data = hauptform.ServerStatusAbfragen(tbxIP.Text, Convert.ToInt32(tbxPort.Text));
+            string data = hauptform.ServerStatusAbfragen(tbxIP.Text, Convert.ToInt32(tbxPort.Text));
             string[] daten = data.Split(';');
             StreamWriter sw = new StreamWriter(dateipfad);
-            sw.WriteLine(daten[4] + tbxIP.Text + tbxPort.Text);
-            sw.Close();*/
+            sw.WriteLine(daten[4] + ";"+tbxIP.Text+";" + tbxPort.Text);
+            
+            sw.Close();
         }
 
         private bool PortIstPort()

@@ -11,18 +11,20 @@ namespace ChatServer
 {
     class Program
     {
-        //Ich erzeuge mein Lauscher Klasse in welcher sich der Socket befindet, 
-        //der mir die eigtl. Verbindungssockets erzeugt 
+        //
+        //
         static public Listener listener;
         static public ServerCmd serverCmd;
         static public ServerDB serverDB;
         static public List<Client> clients;
-        static public int port = 8;
+        static public int port;
 
         static void Main(string[] args)
         {
             //This must be the first line!!
             ServerConfigManager.LoadMyConfigs();
+
+            port = (int)ServerConfigManager.MyConfigs["port"];
 
             Process.GetCurrentProcess().Exited += Program_Exited;
 
@@ -46,8 +48,10 @@ namespace ChatServer
         static void listener_SocketAccepted(object sender, SocketAcceptedEventHandler e)
         {
             Console.WriteLine("New Connection: {0}\n{1}\n===========", e.Accepted.RemoteEndPoint, DateTime.Now);
+            
             clients.Add(new Client(e.Accepted));
             int currIndex = clients.Count - 1;
+            Console.WriteLine(clients[currIndex].ID);
             clients[currIndex].indexOffset = currIndex;
             clients[currIndex].Received += new Client.ClientReceivedHandler(client_Received);
             clients[currIndex].Disconnected += new Client.ClientDisconnectedHandler(client_Disconnected);
@@ -62,10 +66,12 @@ namespace ChatServer
 
         static void client_Disconnected(Client sender)
         {
-            Console.WriteLine("User hat sich ausgeloggt: " + sender.EndPoint.ToString());
+            Console.WriteLine("User hat sich ausgeloggt: " + sender.sck.RemoteEndPoint.ToString());
+
             serverCmd.CurrClient = sender;
             serverCmd.LogOff();
             sender.Close();
+            clients.Remove(sender);
             
         }
 

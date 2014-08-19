@@ -32,6 +32,7 @@ namespace ChatServer
             //User existiert nicht
             if (reader.GetInt16(0) == 0)
             {
+                if ((bool)ServerConfigManager.MyConfigs["isServerPrivate"]) return ServerCommand.ServerIsPrivate;
                 reader.Close();
                 cmd.CommandText = "insert into client values(null,'" + _username + "','" + _password + "',0,CURRENT_DATE,1,'abwesend');";
                 cmd.ExecuteNonQuery();
@@ -152,7 +153,7 @@ namespace ChatServer
             this.clearCmd();
             List<string> msgLogList=new List<string>();
             int AllowedMsgAmount = (int)ServerConfigManager.MyConfigs["MaxPullMsgLogAmount"];
-            cmd.CommandText = "Select * from msgLog ORDER BY sendTimestamp DESC LIMIT "+AllowedMsgAmount.ToString()+";";
+            cmd.CommandText = "Select * from msgLog ORDER BY sendTimestamp ASC LIMIT "+AllowedMsgAmount.ToString()+";";
             reader = cmd.ExecuteReader();
             while (reader.Read())
 	        {
@@ -174,6 +175,8 @@ namespace ChatServer
         public int getLoggedUserCount()
         {
             this.clearCmd();
+
+
             cmd.CommandText = "select count(id) from client where isLogged=1;";
             reader = cmd.ExecuteReader();
             reader.Read();
@@ -198,14 +201,14 @@ namespace ChatServer
             this.clearCmd();
             string username = this.getUsernameById(Convert.ToInt16(uid));
             string[] msgAr = new string[3];
-            msgAr[0] = Uri.EscapeDataString(username);
+            msgAr[0] = username;
 
             cmd.CommandText="Select msg,sendTimestamp from msgLog where userid="+uid+" ORDER BY sendTimestamp DESC LIMIT 0,1";
 
             reader=cmd.ExecuteReader();
             reader.Read();
-            msgAr[1] = Uri.EscapeDataString(reader.GetString(0));
-            msgAr[2] = Uri.EscapeDataString(Convert.ToString(reader.GetDateTime(1)));
+            msgAr[1] = Convert.ToString(reader.GetDateTime(1));
+            msgAr[2] = reader.GetString(0);
             return msgAr;
         }
     }

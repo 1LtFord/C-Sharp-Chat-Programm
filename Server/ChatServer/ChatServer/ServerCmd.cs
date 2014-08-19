@@ -30,7 +30,7 @@ namespace ChatServer
         DisconnectReceived, //(10)
 
         //Response of Cmd getServerInfo(16)
-        SendServerInfo,//(11,serverName,serverMaxUserCount,currentUserCount,)
+        SendServerInfo,//(11,serverName,serverMaxUserCount,currentUserCount,needPwd(bool))
 
         spreadMsg, //(12,User,Time,Msg)
 
@@ -38,7 +38,9 @@ namespace ChatServer
 
         WrongArgs,//(14)
         AlreadyLogged, //(15)
-        NotLoggedIn
+        NotLoggedIn,//(16)
+        ChangeOfLoggedUserList,//(17,nameOfLoggedUser[,anotherNameOfLoggedUser],...)
+        ChangeOfServerInfo,//(18,serverName,serverMaxUserCount,currentUserCount,needPwd(bool))
 
     }
 
@@ -151,7 +153,7 @@ namespace ChatServer
         {
             if (CurrClient.UserID != "")
             {
-                string msg=Uri.UnescapeDataString(args[0]);
+                string msg=args[0];
                 bool NewMsg=CurrServerDB.AddMsg(CurrClient.UserID, msg);
                 if (NewMsg) 
                 {
@@ -218,8 +220,9 @@ namespace ChatServer
 
         private void Login(string[] args)
         {
+            if ((int)ServerConfigManager.MyConfigs["maxUserCount"] == CurrServerDB.getLoggedUserCount()) CurrClient.Send((int)ServerCommand.ServerIsFull);
             if (CurrClient.UserID != ""){ CurrClient.Send((int)ServerCommand.AlreadyLogged); return;}
-            if ((bool)ServerConfigManager.MyConfigs["isServerPrivate"]) { CurrClient.Send((int)ServerCommand.ServerIsPrivate); return; }
+            //if ((bool)ServerConfigManager.MyConfigs["isServerPrivate"]) { CurrClient.Send((int)ServerCommand.ServerIsPrivate); return; }
             if(args.Length==2)
             {
                 string username=args[0];string password=args[1];
@@ -258,6 +261,22 @@ namespace ChatServer
             //(11,serverName,serverMaxUserCount,currentUserCount,)
             CurrClient.Send((int)ServerCommand.SendServerInfo, ";" + ServerConfigManager.MyConfigs["ServerName"] + ";" + ServerConfigManager.MyConfigs["maxUserCount"] + ";" + CurrServerDB.getLoggedUserCount().ToString());
             
+        }
+
+        public void DecodeArgs(string[] _args)
+        {
+            for (int i = 0; i < _args.Length; i++)
+            {
+                _args[i] = Uri.UnescapeDataString(_args[i]);
+            }
+        }
+
+        public void EncodeArgs(string[] _args)
+        {
+            for (int i = 0; i < _args.Length; i++)
+            {
+                _args[i] = Uri.EscapeDataString(_args[i]);
+            }
         }
 
         public string[] DecodeCmdStringArray(byte[] _data)
