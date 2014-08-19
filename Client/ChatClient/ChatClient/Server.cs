@@ -42,16 +42,25 @@ namespace ChatClient
             {
                 Connection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 Connection.Connect(ip, Convert.ToInt16(port));
+
+                SrvInfo.IP = ip;
+                SrvInfo.Port = port;
+
                 Connected(this);
                 Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
-                CurrClientCommand = new ClientCommand(16);
-                ExecuteCmd(CurrClientCommand);
+                
             
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+        public void getServerInfo()
+        {
+            CurrClientCommand = new ClientCommand(16);
+            ExecuteCmd(CurrClientCommand);
         }
 
         public void ExecuteCmd(ClientCommand _cmd)
@@ -72,10 +81,14 @@ namespace ChatClient
                 int size=Connection.Receive(buf, buf.Length, 0);
                 Array.Resize<byte>(ref buf, size);
                 if (buf.Length == 0) this.Close();
+
                 string cmdString=System.Text.Encoding.UTF8.GetString(buf);
                 CurrServerCommand.fetchCmd(cmdString);
+
                 handleCommand();
+
                 Received();
+
                 Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
 
             }
