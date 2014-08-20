@@ -30,6 +30,7 @@ namespace ChatClient
 
         public void Init()
         {
+            Connection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             SrvInfo = new ServerInfo();
             CurrClientCommand = new ClientCommand();
             CurrServerCommand = new ServerCommand();
