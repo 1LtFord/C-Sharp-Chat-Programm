@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
-
-namespace ChatClient
+﻿namespace ChatClient
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net.Sockets;
+
     public class Server
     {
         public Socket Connection;
@@ -48,7 +45,7 @@ namespace ChatClient
                 SrvInfo.Port = port;
 
                 Connected(this);
-                Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
+                Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, this.Callback, null);
                 
             
             }
@@ -71,40 +68,46 @@ namespace ChatClient
 
         }
 
-        private void callback(IAsyncResult ar)
+        private void Callback(IAsyncResult ar)
         {
             try
             {
-                Connection.EndReceive(ar);
+                this.Connection.EndReceive(ar);
 
-                byte[] buf = new byte[Connection.ReceiveBufferSize];
+                byte[] buf = new byte[this.Connection.ReceiveBufferSize];
+                var size = this.Connection.Receive(buf, buf.Length, 0);
 
-                int size=Connection.Receive(buf, buf.Length, 0);
                 Array.Resize<byte>(ref buf, size);
-                if (buf.Length == 0) this.Close();
+                if (buf.Length == 0)
+                {
+                    this.Close();
+                }
 
-                string cmdString=System.Text.Encoding.UTF8.GetString(buf);
-                CurrServerCommand.FetchCommand(cmdString);
+                var cmdString = System.Text.Encoding.UTF8.GetString(buf);
+                this.CurrServerCommand.FetchCommand(cmdString);
 
-                handleCommand();
+                this.HandleCommand();
 
-                Received();
+                var onReceived = this.Received;
+                if (onReceived != null)
+                {
+                    onReceived();
+                }
 
-                Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, callback, null);
-
+                this.Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, this.Callback, null);
             }
             catch (Exception)
             {
-                if (Disconnected != null)
+                if (this.Disconnected != null)
                 {
-                    Disconnected(this);
+                    this.Disconnected(this);
                 }
             }
         }
 
-        public void handleCommand()
+        public void HandleCommand()
         {
-            switch (CurrServerCommand.CommandList)
+            switch (this.CurrServerCommand.CommandList)
             {
                 case ServerCommandList.IsLogged:
                     break;
@@ -129,7 +132,7 @@ namespace ChatClient
                 case ServerCommandList.DisconnectReceived:
                     break;
                 case ServerCommandList.SendServerInfo:
-                    retrieveServerInfo();
+                    this.RetrieveServerInfo();
                     break;
                 case ServerCommandList.SpreadMessage:
                     break;
@@ -148,23 +151,19 @@ namespace ChatClient
                 default:
                     break;
             }
-            
         }
 
-        private void retrieveServerInfo()
+        private void RetrieveServerInfo()
         {
-            SrvInfo.parseSrvInfo(CurrServerCommand.Args);
-
+            this.SrvInfo.parseSrvInfo(this.CurrServerCommand.Args);
         }
     
-        public void fetchCommand(byte[] _buf)
+        public void FetchCommand(byte[] buffer)
         {
-
-            string CommandString = System.Text.Encoding.UTF8.GetString(_buf);
-            CurrServerCommand.FetchCommand(CommandString);
-            handleCommand();
-            Received();
-
+            var CommandString = System.Text.Encoding.UTF8.GetString(buffer);
+            this.CurrServerCommand.FetchCommand(CommandString);
+            this.HandleCommand();
+            this.Received();
         }
 
         public void Disconnect()
@@ -187,10 +186,5 @@ namespace ChatClient
         public delegate void ServerReceivedHandler();
         public delegate void ServerDisconnectedHandler(Server sender);
         public delegate void ServerConnectedHandler(Server sender);
-
-        
-
-
-
     }
 }
