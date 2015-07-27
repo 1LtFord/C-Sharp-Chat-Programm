@@ -131,7 +131,7 @@ namespace ChatClient
                 case ServerCommandList.SendServerInfo:
                     retrieveServerInfo();
                     break;
-                case ServerCommandList.SpreadMsg:
+                case ServerCommandList.SpreadMessage:
                     break;
                 case ServerCommandList.ServerIsClosing:
                     break;

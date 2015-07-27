@@ -14,7 +14,7 @@
         MsgAccepted,
         DisconnectReceived,
         SendServerInfo,
-        SpreadMsg,
+        SpreadMessage,
         ServerIsClosing,
         WrongArgs,
         AlreadyLogged,
