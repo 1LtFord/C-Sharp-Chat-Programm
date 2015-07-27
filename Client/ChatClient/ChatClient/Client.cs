@@ -17,10 +17,10 @@ namespace ChatClient
 
         public Client()
         {
-            SrvInfoList = new List<ServerInfo>();
-            LoadSrvInfoList();
-            connectedServer = new Server();
-            connectedServer.Disconnected += new Server.ServerDisconnectedHandler(server_Disconnected);
+            this.SrvInfoList = new List<ServerInfo>();
+            this.LoadSrvInfoList();
+            this.connectedServer = new Server();
+            this.connectedServer.Disconnected += new Server.ServerDisconnectedHandler(server_Disconnected);
         }
 
         private void LoadSrvInfoList()

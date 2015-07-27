@@ -1,4 +1,4 @@
 C-Sharp-Chat-Programm
 =====================
 
-C# Chatprogramm with client- and serveraplication
+C# Chat Program with client and server application
