@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ChatClient
+﻿namespace ChatClient
 {
-   
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public enum ServerCmd
     {
-        //Responses of cmd Login(4;Benutzername;BenutzerPW[;ServerPW])
+        //Responses of CommandList Login(4;Benutzername;BenutzerPW[;ServerPW])
         isLogged,//(0)
         WrongPwd,//(1)
         NewUserRegistered,//(2)
@@ -42,75 +39,6 @@ namespace ChatClient
         NotLoggedIn,//(16)
         ChangeOfLoggedUserList,//(17,nameOfLoggedUser[,anotherNameOfLoggedUser],...)
         ChangeOfServerInfo,//(18,serverName,serverMaxUserCount,currentUserCount,needPwd(bool))
-
-    }
-
-    public enum ClientCmd
-    {
-        connect,
-        sendMsg,//(1,Nachricht)
-        disconnect,//(2)
-        changeName,
-        login, // (4;Benutzername;BenutzerPW[;ServerPW])
-        getLatestMsgLog,//(5)
-        getLoggedUserList, //(6)
-        getAllUserList,
-        setMyStatus,
-        getMyStatus,
-        kickUser,
-        banUser,
-        setUserRole,
-        UnbanUser,
-        sendPrivateMsg,
-        changePwd,
-        getServerInfo,//(16)
-        getServerReadme
-
-    }
-
-
-    public class ClientCommand
-    {
-        public ClientCmd cmd;
-        public List<string> Args;
-        public ClientCommand(string _CmdString)
-        {
-            fetchCmd(_CmdString);
-            Init();
-        }
-        public ClientCommand()
-        {
-            Init();
-        }
-        public ClientCommand(int _cmd)
-        {
-            cmd = (ClientCmd)Enum.Parse(typeof(ClientCmd), _cmd.ToString());
-            Init();
-        }
-
-        private void Init()
-        {
-            Args = new List<string>();
-        }
-        
-        public void fetchCmd(string _CmdString)
-        {
-            string[] buff=_CmdString.Split(';');
-            ClientCmd cmd = (ClientCmd)Enum.Parse(typeof(ClientCmd), buff[0]);
-            Args=buff.Where(w => w != buff[0]).ToList<string>();
-        }
-
-        public override string ToString()
-        {
-            string myCmdString = ((int)cmd).ToString() ;
-            foreach (string item in Args)
-            {
-                myCmdString = myCmdString + ";" + item;
-            }
-            return myCmdString;
-        }
-
-
     }
 
     public class ServerCommand
@@ -127,7 +55,7 @@ namespace ChatClient
         }
         public ServerCommand(int _cmd)
         {
-            ClientCmd cmd = (ClientCmd)Enum.Parse(typeof(ClientCmd), _cmd.ToString());
+            ClientCommandList CommandList = (ClientCommandList)Enum.Parse(typeof(ClientCommandList), _cmd.ToString());
         }
 
         public void fetchCmd(string _CmdString)
@@ -140,11 +68,8 @@ namespace ChatClient
         public override string ToString()
         {
             string myCmdString = ((int)cmd).ToString();
-            foreach (string item in Args)
-            {
-                myCmdString = myCmdString + ";" + item;
-            }
-            return myCmdString;
+
+            return this.Args.Aggregate(myCmdString, (current, item) => current + ";" + item);
         }
 
 
