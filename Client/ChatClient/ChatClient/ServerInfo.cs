@@ -38,14 +38,11 @@
             return stringBuilder.ToString();
         }
 
-        public void parseSrvInfo(List<string> _info)
+        public void ParseServerInfo(List<string> info)
         {
-            ServerName = _info[0];
-            MaxUserAmount = Convert.ToUInt16(_info[1]);
-            CurrUserAmount = Convert.ToUInt16(_info[2]);
-
+            this.ServerName = info[0];
+            this.MaxUserAmount = Convert.ToUInt16(info[1]);
+            this.CurrUserAmount = Convert.ToUInt16(info[2]);
         }
-
-
     }
 }
