@@ -10,34 +10,27 @@
         public string SrvPwd;
         public List<ServerInfo> SrvInfoList;
         
-
         public Client()
         {
             this.SrvInfoList = new List<ServerInfo>();
-            this.LoadSrvInfoList();
+            this.LoadServerInfoList();
             this.connectedServer = new Server();
-            this.connectedServer.Disconnected += new Server.ServerDisconnectedHandler(server_Disconnected);
+            this.connectedServer.Disconnected += new Server.ServerDisconnectedHandler(this.ServerDisconnected);
         }
-
-        private void LoadSrvInfoList()
-        {
-
-        }
-
-        public void setLoginData(string _LoginName, string _LoginPwd, string _SrvPwd="")
-        {
-            LoginName = _LoginName;
-            LoginPwd = _LoginPwd;
-            SrvPwd = _SrvPwd;
-        }
-
         
-
-        public void server_Disconnected(object handle)
+        public void SetLoginData(string loginName, string loginPassword, string serverPassword = "")
         {
-            
+            this.LoginName = loginName;
+            this.LoginPwd = loginPassword;
+            this.SrvPwd = serverPassword;
         }
 
+        public void ServerDisconnected(object handle)
+        {
+        }
         
+        private void LoadServerInfoList()
+        {
+        }
     }
 }
