@@ -13,96 +13,63 @@
         public ServerCommand CurrServerCommand;
         public ClientCommand CurrClientCommand;
 
+        public delegate void ServerReceivedHandler();
+        public delegate void ServerDisconnectedHandler(Server sender);
+        public delegate void ServerConnectedHandler(Server sender);
+
+        public event ServerReceivedHandler Received;
+
+        public event ServerDisconnectedHandler Disconnected;
+
+        public event ServerConnectedHandler Connected;
 
         public Server(string ip,string port)
         {
-            Init();
-            Connect(ip, port);
+            this.Init();
+            this.Connect(ip, port);
         }
 
         public Server()
         {
-            Init();
+            this.Init();
         }
 
         public void Init()
         {
-            Connection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            SrvInfo = new ServerInfo();
-            CurrClientCommand = new ClientCommand();
-            CurrServerCommand = new ServerCommand();
+            this.Connection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            this.SrvInfo = new ServerInfo();
+            this.CurrClientCommand = new ClientCommand();
+            this.CurrServerCommand = new ServerCommand();
         }
 
         public void Connect(string ip,string port)
         {
-            
             try
             {
-                Connection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                Connection.Connect(ip, Convert.ToInt16(port));
+                this.Connection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                this.Connection.Connect(ip, Convert.ToInt16(port));
 
-                SrvInfo.IP = ip;
-                SrvInfo.Port = port;
+                this.SrvInfo.IP = ip;
+                this.SrvInfo.Port = port;
 
-                Connected(this);
-                Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, this.Callback, null);
-                
-            
+                this.Connected(this);
+                this.Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, this.Callback, null);
             }
-            catch (Exception)
+            catch (Exception ex) // TODO here is cannot Exception
             {
                 throw;
             }
         }
 
-        public void getServerInfo()
+        public void GetServerInfo()
         {
-            CurrClientCommand = new ClientCommand(16);
-            ExecuteCmd(CurrClientCommand);
+            this.CurrClientCommand = new ClientCommand(16);
+            this.ExecuteCmd(this.CurrClientCommand);
         }
 
-        public void ExecuteCmd(ClientCommand _cmd)
+        public void ExecuteCmd(ClientCommand command)
         {
-
-            Connection.Send(System.Text.Encoding.UTF8.GetBytes(_cmd.ToString()));
-
-        }
-
-        private void Callback(IAsyncResult ar)
-        {
-            try
-            {
-                this.Connection.EndReceive(ar);
-
-                byte[] buf = new byte[this.Connection.ReceiveBufferSize];
-                var size = this.Connection.Receive(buf, buf.Length, 0);
-
-                Array.Resize<byte>(ref buf, size);
-                if (buf.Length == 0)
-                {
-                    this.Close();
-                }
-
-                var cmdString = System.Text.Encoding.UTF8.GetString(buf);
-                this.CurrServerCommand.FetchCommand(cmdString);
-
-                this.HandleCommand();
-
-                var onReceived = this.Received;
-                if (onReceived != null)
-                {
-                    onReceived();
-                }
-
-                this.Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, this.Callback, null);
-            }
-            catch (Exception)
-            {
-                if (this.Disconnected != null)
-                {
-                    this.Disconnected(this);
-                }
-            }
+            this.Connection.Send(System.Text.Encoding.UTF8.GetBytes(command.ToString()));
         }
 
         public void HandleCommand()
@@ -153,38 +120,67 @@
             }
         }
 
-        private void RetrieveServerInfo()
-        {
-            this.SrvInfo.parseSrvInfo(this.CurrServerCommand.Args);
-        }
-    
         public void FetchCommand(byte[] buffer)
         {
-            var CommandString = System.Text.Encoding.UTF8.GetString(buffer);
-            this.CurrServerCommand.FetchCommand(CommandString);
+            var commandString = System.Text.Encoding.UTF8.GetString(buffer);
+            this.CurrServerCommand.FetchCommand(commandString);
             this.HandleCommand();
             this.Received();
         }
 
         public void Disconnect()
         {
-            Connection.Close();
-            Connection.Dispose();
-            Disconnected(this);
+            this.Connection.Close();
+            this.Connection.Dispose();
+            this.Disconnected(this);
         }
 
+        private void Callback(IAsyncResult ar)
+        {
+            try
+            {
+                this.Connection.EndReceive(ar);
+
+                byte[] buf = new byte[this.Connection.ReceiveBufferSize];
+                var size = this.Connection.Receive(buf, buf.Length, 0);
+
+                Array.Resize<byte>(ref buf, size);
+                if (buf.Length == 0)
+                {
+                    this.Close();
+                }
+
+                var cmdString = System.Text.Encoding.UTF8.GetString(buf);
+                this.CurrServerCommand.FetchCommand(cmdString);
+
+                this.HandleCommand();
+
+                var onReceived = this.Received;
+                if (onReceived != null)
+                {
+                    onReceived();
+                }
+
+                this.Connection.BeginReceive(new byte[] { 0 }, 0, 0, 0, this.Callback, null);
+            }
+            catch (Exception)
+            {
+                if (this.Disconnected != null)
+                {
+                    this.Disconnected(this);
+                }
+            }
+        }
+        
+        private void RetrieveServerInfo()
+        {
+            this.SrvInfo.parseSrvInfo(this.CurrServerCommand.Args);
+        }
+    
         private void Close()
         {
             Connection.Close();
             Connection.Dispose();
         }
-
-        public event ServerReceivedHandler Received;
-        public event ServerDisconnectedHandler Disconnected;
-        public event ServerConnectedHandler Connected;
-
-        public delegate void ServerReceivedHandler();
-        public delegate void ServerDisconnectedHandler(Server sender);
-        public delegate void ServerConnectedHandler(Server sender);
     }
 }
