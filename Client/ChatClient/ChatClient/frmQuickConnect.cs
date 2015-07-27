@@ -27,7 +27,7 @@ namespace ChatClient
             try
             {
                 myClient.connectedServer.Connect(tbxIP.Text, tbxPort.Text);
-                myClient.connectedServer.getServerInfo();
+                myClient.connectedServer.GetServerInfo();
                 lblConnectionState.Text = "Connected";
                 lblConnectionState.ForeColor = Color.LightGreen;
 
