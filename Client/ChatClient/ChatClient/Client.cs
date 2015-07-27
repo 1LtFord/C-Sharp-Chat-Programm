@@ -4,11 +4,12 @@
 
     public class Client
     {
-        private Server connectedServer;
+        public List<ServerInfo> ServerInfoList;
+
+        public Server connectedServer;
         private string loginName;
         private string loginPassword;
         private string serverPassword;
-        public List<ServerInfo> ServerInfoList;
         
         public Client()
         {
@@ -18,10 +19,10 @@
             this.connectedServer.Disconnected += new Server.ServerDisconnectedHandler(this.ServerDisconnected);
         }
         
-        public void SetLoginData(string loginName, string loginPassword, string serverPassword = "")
+        public void SetLoginData(string name, string password, string serverPassword = "")
         {
-            this.loginName = loginName;
-            this.loginPassword = loginPassword;
+            this.loginName = name;
+            this.loginPassword = password;
             this.serverPassword = serverPassword;
         }
 
