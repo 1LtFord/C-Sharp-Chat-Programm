@@ -174,7 +174,7 @@
         
         private void RetrieveServerInfo()
         {
-            this.SrvInfo.parseSrvInfo(this.CurrServerCommand.Args);
+            this.SrvInfo.ParseServerInfo(this.CurrServerCommand.Args);
         }
     
         private void Close()
