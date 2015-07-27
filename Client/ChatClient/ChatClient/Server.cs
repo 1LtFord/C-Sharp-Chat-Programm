@@ -179,8 +179,8 @@
     
         private void Close()
         {
-            Connection.Close();
-            Connection.Dispose();
+            this.Connection.Close();
+            this.Connection.Dispose();
         }
     }
 }
