@@ -3,12 +3,12 @@
     public enum ClientCommandList
     {
         Connect,
-        SendMsg, // (1,Nachricht)
-        Disconnect, // (2)
+        SendMsg,
+        Disconnect,
         ChangeName,
-        Login, // (4;Benutzername;BenutzerPW[;ServerPW])
-        GetLatestMsgLog, // (5)
-        GetLoggedUserList, // (6)
+        Login,
+        GetLatestMsgLog,
+        GetLoggedUserList,
         GetAllUserList,
         SetMyStatus,
         GetMyStatus,
@@ -18,7 +18,7 @@
         UnbanUser,
         SendPrivateMsg,
         ChangePwd,
-        GetServerInfo, // (16)
+        GetServerInfo,
         GetServerReadme
     }
 }
