@@ -8,34 +8,32 @@
     {
         public ServerCommandList CommandList;
         public List<string> Args;
-        public ServerCommand(string _CmdString)
+
+        public ServerCommand(string command)
         {
-            fetchCmd(_CmdString);
+            this.FetchCommand(command);
         }
+
         public ServerCommand()
         {
-
-        }
-        public ServerCommand(int _cmd)
-        {
-            ClientCommandList CommandList = (ClientCommandList)Enum.Parse(typeof(ClientCommandList), _cmd.ToString());
         }
 
-        public void fetchCmd(string _CmdString)
+        public ServerCommand(int command)
         {
-            string[] buff = _CmdString.Split(';');
+            ClientCommandList CommandList = (ClientCommandList)Enum.Parse(typeof(ClientCommandList), command.ToString());
+        }
+
+        public void FetchCommand(string command)
+        {
+            string[] buff = command.Split(';');
             ServerCommandList CommandList = (ServerCommandList)Enum.Parse(typeof(ServerCommandList), buff[0]);
-            Args = buff.Where(w => w != buff[0]).ToList<string>();
+            this.Args = buff.Where(w => w != buff[0]).ToList<string>();
         }
 
         public override string ToString()
         {
-            string myCmdString = ((int)this.CommandList).ToString();
-
+            var myCmdString = ((int)this.CommandList).ToString();
             return this.Args.Aggregate(myCmdString, (current, item) => current + ";" + item);
         }
-
-
     }
-
 }
