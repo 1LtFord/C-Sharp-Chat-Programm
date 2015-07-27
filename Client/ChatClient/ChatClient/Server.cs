@@ -84,7 +84,7 @@ namespace ChatClient
                 if (buf.Length == 0) this.Close();
 
                 string cmdString=System.Text.Encoding.UTF8.GetString(buf);
-                CurrServerCommand.fetchCmd(cmdString);
+                CurrServerCommand.FetchCommand(cmdString);
 
                 handleCommand();
 
@@ -161,7 +161,7 @@ namespace ChatClient
         {
 
             string CommandString = System.Text.Encoding.UTF8.GetString(_buf);
-            CurrServerCommand.fetchCmd(CommandString);
+            CurrServerCommand.FetchCommand(CommandString);
             handleCommand();
             Received();
 
