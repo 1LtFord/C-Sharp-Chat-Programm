@@ -8,11 +8,7 @@
         private string author;
         private string text;
         private string date;
-
-        public Message()
-        {
-        }
-
+        
         public Message(string author, string text, string date)
         {
             this.FetchMessage(author, text, date);
