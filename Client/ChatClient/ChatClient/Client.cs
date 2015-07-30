@@ -28,6 +28,7 @@
 
         public void ServerDisconnected(object handle)
         {
+            // TODO no implement
         }
         
         private void LoadServerInfoList()
