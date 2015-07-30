@@ -47,7 +47,7 @@
     <Compile Include="Client.cs" />
     <Compile Include="ClientCommand.cs" />
     <Compile Include="ClientCommandList.cs" />
-    <Compile Include="Command.cs" />
+    <Compile Include="ServerCommand.cs" />
     <Compile Include="frmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,7 +99,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
