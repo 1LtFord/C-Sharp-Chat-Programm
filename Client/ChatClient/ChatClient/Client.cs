@@ -1,47 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ChatClient
+﻿namespace ChatClient
 {
+    using System.Collections.Generic;
+
     public class Client
     {
-        public Server connectedServer;
-        public string LoginName;
-        public string LoginPwd;
-        public string SrvPwd;
-        public List<ServerInfo> SrvInfoList;
-        
+        public List<ServerInfo> ServerInfoList;
 
+        public Server connectedServer;
+        private string loginName;
+        private string loginPassword;
+        private string serverPassword;
+        
         public Client()
         {
-            this.SrvInfoList = new List<ServerInfo>();
-            this.LoadSrvInfoList();
+            this.ServerInfoList = new List<ServerInfo>();
+            this.LoadServerInfoList();
             this.connectedServer = new Server();
-            this.connectedServer.Disconnected += new Server.ServerDisconnectedHandler(server_Disconnected);
+            this.connectedServer.Disconnected += new Server.ServerDisconnectedHandler(this.ServerDisconnected);
         }
-
-        private void LoadSrvInfoList()
-        {
-
-        }
-
-        public void setLoginData(string _LoginName, string _LoginPwd, string _SrvPwd="")
-        {
-            LoginName = _LoginName;
-            LoginPwd = _LoginPwd;
-            SrvPwd = _SrvPwd;
-        }
-
         
-
-        public void server_Disconnected(object handle)
+        public void SetLoginData(string name, string password, string serverPassword = "")
         {
-            
+            this.loginName = name;
+            this.loginPassword = password;
+            this.serverPassword = serverPassword;
         }
 
+        public void ServerDisconnected(object handle)
+        {
+            // TODO no implement
+        }
         
+        private void LoadServerInfoList()
+        {
+            // TODO no implement
+        }
     }
 }

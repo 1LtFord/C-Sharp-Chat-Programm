@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ChatClient
+﻿namespace ChatClient
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public struct ServerInfo
     {
         public string IP;
@@ -20,17 +18,31 @@ namespace ChatClient
 
         public override string ToString()
         {
-            return IP + ";" + Port + ";" + ServerName + ";" + Username + ";" + Pwd + ";" + SrvPwd + ";" + MaxUserAmount + ";" + CurrUserAmount;
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append(this.IP);
+            stringBuilder.Append(";");
+            stringBuilder.Append(this.Port);
+            stringBuilder.Append(";");
+            stringBuilder.Append(this.ServerName);
+            stringBuilder.Append(";");
+            stringBuilder.Append(this.Username);
+            stringBuilder.Append(";");
+            stringBuilder.Append(this.Pwd);
+            stringBuilder.Append(";");
+            stringBuilder.Append(this.SrvPwd);
+            stringBuilder.Append(";");
+            stringBuilder.Append(this.MaxUserAmount);
+            stringBuilder.Append(";");
+            stringBuilder.Append(this.CurrUserAmount);
+
+            return stringBuilder.ToString();
         }
 
-        public void parseSrvInfo(List<string> _info)
+        public void ParseServerInfo(List<string> info)
         {
-            ServerName = _info[0];
-            MaxUserAmount = Convert.ToUInt16(_info[1]);
-            CurrUserAmount = Convert.ToUInt16(_info[2]);
-
+            this.ServerName = info[0];
+            this.MaxUserAmount = Convert.ToUInt16(info[1]);
+            this.CurrUserAmount = Convert.ToUInt16(info[2]);
         }
-
-
     }
 }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace ChatClient
+﻿namespace ChatClient
 {
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
+
     public partial class frmMainWindow : Form
     {
         public Client myClient;
@@ -27,46 +21,46 @@ namespace ChatClient
 
         public void handleCommand()
         {
-            switch (myClient.connectedServer.CurrServerCommand.cmd)
+            switch (myClient.connectedServer.CurrServerCommand.CommandList)
             {
-                case ServerCmd.isLogged:
+                case ServerCommandList.IsLogged:
                     break;
-                case ServerCmd.WrongPwd:
+                case ServerCommandList.WrongPwd:
                     break;
-                case ServerCmd.NewUserRegistered:
+                case ServerCommandList.NewUserRegistered:
                     break;
-                case ServerCmd.ServerIsFull:
+                case ServerCommandList.ServerIsFull:
                     break;
-                case ServerCmd.ServerIsPrivate:
+                case ServerCommandList.ServerIsPrivate:
                     break;
-                case ServerCmd.UserIsBanned:
+                case ServerCommandList.UserIsBanned:
                     break;
-                case ServerCmd.LoggedUserList:
+                case ServerCommandList.LoggedUserList:
                     break;
-                case ServerCmd.sendLatestMsgLog:
+                case ServerCommandList.SendLatestMsgLog:
                     break;
-                case ServerCmd.MsgLogRestricted:
+                case ServerCommandList.MsgLogRestricted:
                     break;
-                case ServerCmd.MsgAccepted:
+                case ServerCommandList.MsgAccepted:
                     break;
-                case ServerCmd.DisconnectReceived:
+                case ServerCommandList.DisconnectReceived:
                     break;
-                case ServerCmd.SendServerInfo:
+                case ServerCommandList.SendServerInfo:
                     MessageBox.Show(myClient.connectedServer.CurrServerCommand.ToString());
                     break;
-                case ServerCmd.spreadMsg:
+                case ServerCommandList.SpreadMessage:
                     break;
-                case ServerCmd.ServerIsClosing:
+                case ServerCommandList.ServerIsClosing:
                     break;
-                case ServerCmd.WrongArgs:
+                case ServerCommandList.WrongArgs:
                     break;
-                case ServerCmd.AlreadyLogged:
+                case ServerCommandList.AlreadyLogged:
                     break;
-                case ServerCmd.NotLoggedIn:
+                case ServerCommandList.NotLoggedIn:
                     break;
-                case ServerCmd.ChangeOfLoggedUserList:
+                case ServerCommandList.ChangeOfLoggedUserList:
                     break;
-                case ServerCmd.ChangeOfServerInfo:
+                case ServerCommandList.ChangeOfServerInfo:
                     break;
                 default:
                     break;
@@ -121,7 +115,5 @@ namespace ChatClient
         {
 
         }
-
-        
     }
 }
