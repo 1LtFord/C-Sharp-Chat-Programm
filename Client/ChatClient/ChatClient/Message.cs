@@ -8,10 +8,10 @@
         private string author;
         private string text;
         private string date;
-        
-        public Message(string author, string text, string date)
+
+        public Message(string author, string textString, string date)
         {
-            this.FetchMessage(author, text, date);
+            this.FetchMessage(author, textString, date);
         }
 
         public Message(string message)
@@ -21,10 +21,10 @@
         }
 
 
-        public void FetchMessage(string author, string text, string date)
+        public void FetchMessage(string author, string textString, string date)
         {
             this.author = author;
-            this.text = text;
+            this.text = textString;
             this.date = date;
         }
 
@@ -41,14 +41,14 @@
             return stringBuilder.ToString();
         }
 
-        public string UnscapeText(string text)
+        public string UnscapeText(string textString)
         {
-            return Uri.UnescapeDataString(text);
+            return Uri.UnescapeDataString(textString);
         }
 
-        public string EscapeText(string text)
+        public string EscapeText(string textString)
         {
-            return Uri.EscapeDataString(text);
+            return Uri.EscapeDataString(textString);
         }
     }
 }
